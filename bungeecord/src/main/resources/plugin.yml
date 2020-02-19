@@ -1,0 +1,4 @@
+name: Donation-Store-Bungeecord
+main: net.donationstore.bungeecord.DonationStorePlugin
+version: '2.0'
+author: Donation-Store
