@@ -3,7 +3,6 @@ package net.donationstore.commands;
 import net.donationstore.exception.InvalidCommandUseException;
 import net.donationstore.exception.InvalidLicenseException;
 import net.donationstore.license.LicenseHandler;
-import net.donationstore.license.LicenseType;
 
 import java.util.ArrayList;
 

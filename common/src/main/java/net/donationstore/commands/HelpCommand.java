@@ -12,8 +12,12 @@ public class HelpCommand implements Command {
 
     @Override
     public ArrayList<String> runCommand(String[] args) {
-        // Just add things to the help page and return it
-        return null;
+        logs.add("/ds currency-balances : Gets your virtual currency balances");
+        logs.add("/ds currency-code : Generates a virtual currency code");
+        logs.add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
+        logs.add("/ds help : Runs the help command");
+
+        return logs;
     }
 
     @Override
