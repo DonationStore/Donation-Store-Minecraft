@@ -1,17 +1,21 @@
 package net.donationstore.spigot;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.donationstore.commands.CommandManager;
+import net.donationstore.dto.CommandExectionPayloadDTO;
+import net.donationstore.dto.QueueDTO;
+import net.donationstore.exception.CommandNotFoundException;
+import net.donationstore.exception.InvalidCommandUseException;
+import net.donationstore.exception.WebstoreAPIException;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Map;
 
 public class DonationStorePlugin extends JavaPlugin {
 
@@ -30,18 +34,23 @@ public class DonationStorePlugin extends JavaPlugin {
         Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
             public void run() {
                 try {
-                    JsonArray commandQueue = commandManager.getCommands("secretKey", "webstoreAPILocation");
+                    ArrayList<String> executedCommands = new ArrayList<>();
+                    // Get the command queue, execute the commands that come back.
+                    // Only active commands will come back.
+                    // Keep a list of the executed commands and then POST them back using the command managers update method.
+                    QueueDTO queueDTO = commandManager.getCommands("secretKey", "webstoreAPILocation");
 
-                    for (JsonElement element: commandQueue) {
-                        JsonObject payment = element.getAsJsonObject();
-
-                        JsonObject meta = payment.get("meta").getAsJsonObject();
-
-                        Player player = Bukkit.getPlayer(UUID.fromString(payment.get("uuid").getAsString()));
-
-                        if (player != null) {
-                            // Execute commands
+                    // Execute commands
+                    for(CommandExectionPayloadDTO commandPayload: queueDTO.commandExectionPayloadDTO) {
+                        for(Map.Entry<String, String> command: commandPayload.commands.entrySet()) {
+                            if (!Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.getValue())) {
+                                executedCommands.add(command.getKey());
+                            }
                         }
+                    }
+                    // Make request back with executed commands
+                    if (commandManager.updateCommandsToExecuted("secretKey", "webstoreAPILocation", executedCommands)) {
+                        // Do something
                     }
                 } catch(Exception e) {
                     e.printStackTrace();
@@ -49,4 +58,42 @@ public class DonationStorePlugin extends JavaPlugin {
             }
         }, 1, 5000);
     }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        if(command.getName().equalsIgnoreCase("ds")) {
+            if (args.length == 0) {
+                if (sender instanceof Player) {
+                    Log.toPlayer(sender, "Webstore and Helpdesk for Game Servers");
+                    Log.toPlayer(sender, "Spigot Plugin - Version 2.1");
+                    Log.toPlayer(sender, "https://donationstore.net");
+                    Log.toPlayer(sender, "Type /ds help for command information");
+                }
+            } else {
+                // Call execute command method
+                // The actual args array will have the variables we need.
+                // BUT, we do need to put the webstoreAPILocation and secrety key as number 1 and 2
+                // The rest are whatever.
+                try {
+                    commandManager.executeCommand(args);
+                } catch(Exception exception) {
+                    if (sender instanceof Player) {
+                        Log.toPlayer(sender, exception.getMessage());
+                    } else {
+                        Log.toConsole(exception.getMessage());
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onDisable() {
+        Log.toConsole("Stopping plugin, bye bye!");
+    }
+
+    // Override onCommand method
 }

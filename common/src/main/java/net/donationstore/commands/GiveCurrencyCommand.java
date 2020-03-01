@@ -35,8 +35,8 @@ public class GiveCurrencyCommand implements Command {
             throw new InvalidCommandUseException(logs);
         } else {
             String webstoreAPILocation = args[0];
-            String username = args[1];
-            String secretKey = args[2];
+            String secretKey = args[1];
+            String username = args[2];
             String currencyCode = args[3];
             String amount = args[4];
             Map<String, String> data = new HashMap<>();

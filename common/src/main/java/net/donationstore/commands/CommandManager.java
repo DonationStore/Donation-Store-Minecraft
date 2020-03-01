@@ -7,8 +7,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.donationstore.dto.CommandExectionPayloadDTO;
 import net.donationstore.dto.QueueDTO;
+import net.donationstore.exception.CommandNotFoundException;
 import net.donationstore.exception.InvalidCommandUseException;
 import net.donationstore.exception.WebstoreAPIException;
+import net.donationstore.util.FormUtil;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,10 +25,12 @@ public class CommandManager {
 
     private QueueDTO queueDTO;
     private HttpClient httpClient;
+    private ArrayList<String> logs;
     private ObjectMapper objectMapper;
     public HashMap<String, Command> commands;
 
     public CommandManager() {
+        logs = new ArrayList<>();
         queueDTO = new QueueDTO();
         objectMapper = new ObjectMapper();
         commands = new HashMap<String, Command>();
@@ -40,6 +44,44 @@ public class CommandManager {
         httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
+    }
+
+    // Execute command method
+    public void executeCommand(String args[]) throws Exception {
+        String commandName = args[0];
+
+        if(commands.containsKey(commandName)) {
+            commands.get(commandName).runCommand(args);
+        } else {
+            logs.add("Command not found");
+            throw new CommandNotFoundException(logs);
+        }
+    }
+
+    public boolean updateCommandsToExecuted(String secretKey, String webstoreAPILocation, ArrayList<String> commands) throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("commands", commands.toString());
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(String.format("%s/commands/execute", webstoreAPILocation)))
+                .header("secret-key", secretKey)
+                .POST(FormUtil.ofFormData(data))
+                .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                // Do something
+                return true;
+            }
+        } catch(IOException exception) {
+            throw new IOException("IOException when contacting your webstore to give list of executed commands.");
+        } catch(InterruptedException exception) {
+            throw new InterruptedException("IOException when contacting your webstore to give list of executed commands.");
+        }
+
+        return true;
     }
 
     public QueueDTO getCommands(String secretKey, String webstoreAPILocation) throws Exception {
