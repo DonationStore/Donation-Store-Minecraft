@@ -12,9 +12,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-// Must handle logic in each plugin that says the following:
-// If this throws an exception then we can't continue.
-// If it doesn't save the passed in applicationAPILocation and secretKey
 public class Connect implements Command {
 
     private HttpClient httpClient;

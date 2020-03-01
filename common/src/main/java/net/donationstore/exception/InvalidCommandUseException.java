@@ -9,4 +9,9 @@ public class InvalidCommandUseException extends RuntimeException {
     public InvalidCommandUseException(ArrayList<String> logs) {
         this.logs = logs;
     }
+
+    @Override
+    public String getMessage() {
+        return this.logs.toString();
+    }
 }
