@@ -1,5 +1,6 @@
 package net.donationstore.commands;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -12,12 +13,21 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class Connect implements Command {
+public class ConnectCommand implements Command {
 
+    @JsonIgnore
+    private String secretKey;
+
+    @JsonIgnore
+    private String webstoreAPILocation;
+
+    @JsonIgnore
     private HttpClient httpClient;
+
+    @JsonIgnore
     private ArrayList<String> logs;
 
-    public Connect() {
+    public ConnectCommand() {
         logs = new ArrayList<>();
         httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
@@ -25,7 +35,7 @@ public class Connect implements Command {
     }
 
     @Override
-    public ArrayList<String> runCommand(String[] args) throws Exception {
+    public ArrayList<String> runCommand() throws Exception {
 
         if (args.length != 2) {
             logs.add("Invalid usage of command. Help Info: ");
@@ -75,5 +85,23 @@ public class Connect implements Command {
     @Override
     public CommandType commandType() {
         return CommandType.CONSOLE;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public ConnectCommand setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+        return this;
+    }
+
+    public String getWebstoreAPILocation() {
+        return webstoreAPILocation;
+    }
+
+    public ConnectCommand setWebstoreAPILocation(String webstoreAPILocation) {
+        this.webstoreAPILocation = webstoreAPILocation;
+        return this;
     }
 }

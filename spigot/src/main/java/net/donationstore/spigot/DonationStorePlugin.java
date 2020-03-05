@@ -1,5 +1,6 @@
 package net.donationstore.spigot;
 
+import net.donationstore.commands.CommandFactory;
 import net.donationstore.commands.CommandManager;
 import net.donationstore.dto.CommandExectionPayloadDTO;
 import net.donationstore.dto.QueueDTO;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -23,8 +25,13 @@ public class DonationStorePlugin extends JavaPlugin {
     private FileConfiguration config;
     private CommandManager commandManager;
 
+    private CommandFactory commandFactory;
+
     @Override
     public void onEnable() {
+
+        commandFactory = new CommandFactory();
+
         Log.toConsole("Starting plugin...");
         Log.toConsole("For Support/Help, Please Visit: https://donationstore.net/support");
         config = plugin.getConfig();
@@ -76,6 +83,20 @@ public class DonationStorePlugin extends JavaPlugin {
                 // BUT, we do need to put the webstoreAPILocation and secrety key as number 1 and 2
                 // The rest are whatever.
                 try {
+                    /* The following isn't possible because we need to push the secret key
+                       and webstore API location to the front of the args
+                     */
+                    // commandFactory.getCommand(args).runCommand();
+                    ArrayList<String> arrayListOfArgs = new ArrayList<>();
+
+                    String[] secretAndWebstore = {"secretKey", "webstoreAPILocation"};
+                    String[] argsForCommand = new String[secretAndWebstore.length + args.length];
+                    System.arraycopy(secretAndWebstore, 0, argsForCommand, 1, secretAndWebstore.length);
+
+
+                    commandFactory.getCommand(argsForCommand).runCommand();
+
+
                     commandManager.executeCommand(args);
                 } catch(Exception exception) {
                     if (sender instanceof Player) {

@@ -1,5 +1,7 @@
 package net.donationstore.commands;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -17,7 +19,19 @@ import java.util.Map;
 
 public class GetCurrencyBalancesCommand implements Command {
 
+    @JsonProperty("username")
+    private String username;
+
+    @JsonIgnore
+    private String secretKey;
+
+    @JsonIgnore
+    private String webstoreAPILocation;
+
+    @JsonIgnore
     private HttpClient httpClient;
+
+    @JsonIgnore
     private ArrayList<String> logs;
 
     public GetCurrencyBalancesCommand() {
@@ -80,5 +94,32 @@ public class GetCurrencyBalancesCommand implements Command {
     @Override
     public CommandType commandType() {
         return CommandType.PLAYER;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public GetCurrencyBalancesCommand setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public GetCurrencyBalancesCommand setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+        return this;
+    }
+
+    public String getWebstoreAPILocation() {
+        return webstoreAPILocation;
+    }
+
+    public GetCurrencyBalancesCommand setWebstoreAPILocation(String webstoreAPILocation) {
+        this.webstoreAPILocation = webstoreAPILocation;
+        return this;
     }
 }

@@ -2,7 +2,7 @@ package net.donationstore.dto;
 
 import java.util.HashMap;
 
-public class CommandExectionPayloadDTO {
+public class CommandExectionPayloadDTO implements WebstoreAPIResponseDTO {
     // ID -> Command
     public HashMap<String, String> commands;
 

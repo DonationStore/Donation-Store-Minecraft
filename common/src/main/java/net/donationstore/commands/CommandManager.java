@@ -3,12 +3,10 @@ package net.donationstore.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.donationstore.dto.CommandExectionPayloadDTO;
 import net.donationstore.dto.QueueDTO;
 import net.donationstore.exception.CommandNotFoundException;
-import net.donationstore.exception.InvalidCommandUseException;
 import net.donationstore.exception.WebstoreAPIException;
 import net.donationstore.util.FormUtil;
 
@@ -23,21 +21,32 @@ import java.util.Map;
 
 public class CommandManager {
 
+    public static final String HELP = "help";
+    public static final String CONNECT = "CONNECT";
+    public static final String BALANCE = "BALANCE";
+    public static final String CODE = "CODE";
+    public static final String CURRENCY = "CURRENCY";
+
     private QueueDTO queueDTO;
     private HttpClient httpClient;
     private ArrayList<String> logs;
     private ObjectMapper objectMapper;
     public HashMap<String, Command> commands;
 
+    private CommandFactory commandFactory;
+
     public CommandManager() {
+
+        commandFactory = new CommandFactory();
+
         logs = new ArrayList<>();
         queueDTO = new QueueDTO();
         objectMapper = new ObjectMapper();
         commands = new HashMap<String, Command>();
 
-        commands.put("help", new HelpCommand());
-        commands.put("connect", new Connect());
-        commands.put("get currency code", new GetCurrencyCodeCommand());
+        commands.put(HELP, new HelpCommand());
+        commands.put(CONNECT, new ConnectCommand());
+        commands.put(CODE, new GetCurrencyCodeCommand());
         commands.put("give currency", new GiveCurrencyCommand());
         commands.put("get currency balances", new GetCurrencyBalancesCommand());
 
@@ -48,6 +57,8 @@ public class CommandManager {
 
     // Execute command method
     public void executeCommand(String args[]) throws Exception {
+
+
         String commandName = args[0];
 
         if(commands.containsKey(commandName)) {

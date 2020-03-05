@@ -1,5 +1,7 @@
 package net.donationstore.commands;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -17,7 +19,25 @@ import java.util.Map;
 
 public class GiveCurrencyCommand implements Command {
 
+    @JsonProperty("amount")
+    private String amount;
+
+    @JsonProperty("username")
+    private String username;
+
+    @JsonProperty("currency-code")
+    private String currencyCode;
+
+    @JsonIgnore
+    private String secretKey;
+
+    @JsonIgnore
+    private String webstoreAPILocation;
+
+    @JsonIgnore
     private HttpClient httpClient;
+
+    @JsonIgnore
     private ArrayList<String> logs;
 
     public GiveCurrencyCommand() {
@@ -81,5 +101,50 @@ public class GiveCurrencyCommand implements Command {
     @Override
     public CommandType commandType() {
         return CommandType.PLAYER;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public GiveCurrencyCommand setAmount(String amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public GiveCurrencyCommand setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public GiveCurrencyCommand setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+        return this;
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public GiveCurrencyCommand setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+        return this;
+    }
+
+    public String getWebstoreAPILocation() {
+        return webstoreAPILocation;
+    }
+
+    public GiveCurrencyCommand setWebstoreAPILocation(String webstoreAPILocation) {
+        this.webstoreAPILocation = webstoreAPILocation;
+        return this;
     }
 }

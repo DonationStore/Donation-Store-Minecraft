@@ -6,15 +6,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
@@ -25,14 +20,14 @@ public class ConnectTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @InjectMocks
-    private Connect connectCommand;
+    private ConnectCommand connectCommand;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setup() {
-        connectCommand = new Connect();
+        connectCommand = new ConnectCommand();
     }
 
     @Test
