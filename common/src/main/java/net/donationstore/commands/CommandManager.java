@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.donationstore.dto.CommandExectionPayloadDTO;
 import net.donationstore.dto.QueueDTO;
-import net.donationstore.exception.CommandNotFoundException;
 import net.donationstore.exception.WebstoreAPIException;
 import net.donationstore.util.FormUtil;
 
@@ -21,18 +20,10 @@ import java.util.Map;
 
 public class CommandManager {
 
-    public static final String HELP = "help";
-    public static final String CONNECT = "CONNECT";
-    public static final String BALANCE = "BALANCE";
-    public static final String CODE = "CODE";
-    public static final String CURRENCY = "CURRENCY";
-
     private QueueDTO queueDTO;
     private HttpClient httpClient;
     private ArrayList<String> logs;
     private ObjectMapper objectMapper;
-    public HashMap<String, Command> commands;
-
     private CommandFactory commandFactory;
 
     public CommandManager() {
@@ -42,13 +33,6 @@ public class CommandManager {
         logs = new ArrayList<>();
         queueDTO = new QueueDTO();
         objectMapper = new ObjectMapper();
-        commands = new HashMap<String, Command>();
-
-        commands.put(HELP, new HelpCommand());
-        commands.put(CONNECT, new ConnectCommand());
-        commands.put(CODE, new GetCurrencyCodeCommand());
-        commands.put("give currency", new GiveCurrencyCommand());
-        commands.put("get currency balances", new GetCurrencyBalancesCommand());
 
         httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
@@ -56,17 +40,8 @@ public class CommandManager {
     }
 
     // Execute command method
-    public void executeCommand(String args[]) throws Exception {
-
-
-        String commandName = args[0];
-
-        if(commands.containsKey(commandName)) {
-            commands.get(commandName).runCommand(args);
-        } else {
-            logs.add("Command not found");
-            throw new CommandNotFoundException(logs);
-        }
+    public void executeCommand(String[] args) throws Exception {
+        logs = commandFactory.getCommand(args).runCommand();
     }
 
     public boolean updateCommandsToExecuted(String secretKey, String webstoreAPILocation, ArrayList<String> commands) throws Exception {
