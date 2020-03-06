@@ -22,4 +22,4 @@ If you want to contribute to this plugin, go ahead! We would love to see what yo
 when you want. It will be reviewed whenever we have the chance by a developer. Please note that while Donation Store game
 plugins are open source, the core Donation Store application is a product, meaning that this plugin (while not sold with the
 main application), is needed to fulfill the abilities of the core app. By your PR being merged you agree to give us a
-perpetual, royalty free irrevocable to use and relicense the code and even sell it on under any terms. 
+perpetual, royalty free irrevocable to use and re-license the code and even sell it on under any terms. 
