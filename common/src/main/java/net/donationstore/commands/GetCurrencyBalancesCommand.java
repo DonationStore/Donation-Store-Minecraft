@@ -1,6 +1,5 @@
 package net.donationstore.commands;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,80 +9,69 @@ import net.donationstore.util.FormUtil;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetCurrencyBalancesCommand implements Command {
+public class GetCurrencyBalancesCommand extends AbstractCommand {
 
     @JsonProperty("username")
     private String username;
 
-    @JsonIgnore
-    private String secretKey;
+    @Override
+    public String getSupportedCommand() {
+        return "balance";
+    }
 
-    @JsonIgnore
-    private String webstoreAPILocation;
 
-    @JsonIgnore
-    private HttpClient httpClient;
+    @Override
+    public Command validate(String[] args) {
+        if (args.length != 3) {
+            getLogs().add(getInvalidCommandMessage());
+            getLogs().add(helpInfo());
+            throw new InvalidCommandUseException(getLogs());
+        }
 
-    @JsonIgnore
-    private ArrayList<String> logs;
-
-    public GetCurrencyBalancesCommand() {
-        logs = new ArrayList<>();
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+        setSecretKey(args[1]);
+        setWebstoreAPILocation(args[2]);
+        setUsername(args[3]);
+        return this;
     }
 
     @Override
-    public ArrayList<String> runCommand(String[] args) throws Exception {
+    public ArrayList<String> runCommand() throws Exception {
 
-        // The API location and secret key are hard coded in this when it's sent
-        // so if its less than that then it means they are missing their username
-        if (args.length != 3) {
-            logs.add("Invalid usage of command. Help Info: ");
-            logs.add(this.helpInfo());
-            throw new InvalidCommandUseException(logs);
-        } else {
-            String webstoreAPILocation = args[0];
-            String username = args[1];
-            String secretKey = args[2];
-            Map<String, String> data = new HashMap<>();
-            data.put("username", username);
+        Map<String, String> data = new HashMap<>();
+        data.put("username", getUsername());
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(String.format("%s/get-currency-balances", webstoreAPILocation)))
-                    .header("secret-key", secretKey)
-                    .POST(FormUtil.ofFormData(data))
-                    .build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(String.format("%s/get-currency-balances", getWebstoreAPILocation())))
+                .header("secret-key", getSecretKey())
+                .POST(FormUtil.ofFormData(data))
+                .build();
 
-            try {
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        try {
+            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
-                if (response.statusCode() == 200) {
-                    JsonObject jsonResponse = new JsonParser().parse(response.body()).getAsJsonObject();
+            if (response.statusCode() == 200) {
+                JsonObject jsonResponse = new JsonParser().parse(response.body()).getAsJsonObject();
 
-                    logs.add(jsonResponse.get("message").getAsString());
+                getLogs().add(jsonResponse.get("message").getAsString());
 
-                } else {
-                    logs.add("Invalid webstore API response:");
-                    logs.add(response.body());
-                    throw new WebstoreAPIException(logs);
-                }
-            } catch (IOException exception) {
-                throw new IOException("IOException when contacting the webstore API when running the get currency balances command.");
-            } catch (InterruptedException exception) {
-                throw new InterruptedException("InterruptedException when contacting the webstore API when running the get currency balances command.");
+            } else {
+                getLogs().add("Invalid webstore API response:");
+                getLogs().add(response.body());
+                throw new WebstoreAPIException(getLogs());
             }
+        } catch (IOException exception) {
+            throw new IOException("IOException when contacting the webstore API when running the get currency balances command.");
+        } catch (InterruptedException exception) {
+            throw new InterruptedException("InterruptedException when contacting the webstore API when running the get currency balances command.");
         }
 
-        return logs;
+        return getLogs();
     }
 
     @Override
@@ -102,24 +90,6 @@ public class GetCurrencyBalancesCommand implements Command {
 
     public GetCurrencyBalancesCommand setUsername(String username) {
         this.username = username;
-        return this;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public GetCurrencyBalancesCommand setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-        return this;
-    }
-
-    public String getWebstoreAPILocation() {
-        return webstoreAPILocation;
-    }
-
-    public GetCurrencyBalancesCommand setWebstoreAPILocation(String webstoreAPILocation) {
-        this.webstoreAPILocation = webstoreAPILocation;
         return this;
     }
 }

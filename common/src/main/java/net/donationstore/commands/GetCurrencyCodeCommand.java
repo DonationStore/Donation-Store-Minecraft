@@ -1,7 +1,5 @@
 package net.donationstore.commands;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -10,80 +8,68 @@ import net.donationstore.util.FormUtil;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetCurrencyCodeCommand implements Command {
-
-    @JsonProperty("username")
+public class GetCurrencyCodeCommand extends AbstractCommand {
+    
     private String username;
 
-    @JsonIgnore
-    private String secretKey;
-
-    @JsonIgnore
-    private String webstoreAPILocation;
-
-    @JsonIgnore
-    private HttpClient httpClient;
-
-    @JsonIgnore
-    private ArrayList<String> logs;
-
-    public GetCurrencyCodeCommand() {
-        logs = new ArrayList<>();
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+    @Override
+    public String getSupportedCommand() {
+        return "code";
     }
 
     @Override
-    public ArrayList<String> runCommand(String[] args) throws Exception {
-
+    public Command validate(String[] args) {
         if (args.length != 3) {
-            logs.add("Invalid usage of command. Help Info: ");
-            logs.add(this.helpInfo());
-            throw new InvalidCommandUseException(logs);
-        } else {
-            String webstoreAPILocation = args[0];
-            String secretKey = args[1];
-            String username = args[2];
-            Map<String, String> data = new HashMap<>();
-            data.put("username", username);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(String.format("%s/generate-currency-code", webstoreAPILocation)))
-                    .header("secret-key", secretKey)
-                    .POST(FormUtil.ofFormData(data))
-                    .build();
-
-            try {
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200) {
-                    JsonObject jsonResponse = new JsonParser().parse(response.body()).getAsJsonObject();
-
-                    String code = jsonResponse.get("code").getAsString();
-
-                    logs.add(String.format("Virtual Currency Claim Code: %s", code));
-                    logs.add("This will expire in 5 minutes");
-                } else {
-                    logs.add("Invalid webstore API response:");
-                    logs.add(response.body());
-                    throw new WebstoreAPIException(logs);
-                }
-            } catch (IOException exception) {
-                throw new IOException("IOException when contacting the webstore API when running the get currency code command.");
-            } catch (InterruptedException exception) {
-                throw new InterruptedException("InterruptedException when contacting the webstore API when running the get currency code command.");
-            }
+            getLogs().add(getInvalidCommandMessage());
+            getLogs().add(helpInfo());
+            throw new InvalidCommandUseException(getLogs());
         }
 
-        return logs;
+        setSecretKey(args[1]);
+        setWebstoreAPILocation(args[2]);
+        setUsername(args[3]);
+        return this;
+    }
+
+    @Override
+    public ArrayList<String> runCommand() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("username", getUsername());
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(String.format("%s/generate-currency-code", getWebstoreAPILocation())))
+                .header("secret-key", getSecretKey())
+                .POST(FormUtil.ofFormData(data))
+                .build();
+
+        try {
+            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JsonObject jsonResponse = new JsonParser().parse(response.body()).getAsJsonObject();
+
+                String code = jsonResponse.get("code").getAsString();
+
+                getLogs().add(String.format("Virtual Currency Claim Code: %s", code));
+                getLogs().add("This will expire in 5 minutes");
+            } else {
+                getLogs().add("Invalid webstore API response:");
+                getLogs().add(response.body());
+                throw new WebstoreAPIException(getLogs());
+            }
+        } catch (IOException exception) {
+            throw new IOException("IOException when contacting the webstore API when running the get currency code command.");
+        } catch (InterruptedException exception) {
+            throw new InterruptedException("InterruptedException when contacting the webstore API when running the get currency code command.");
+        }
+
+        return getLogs();
     }
 
     @Override
@@ -102,24 +88,6 @@ public class GetCurrencyCodeCommand implements Command {
 
     public GetCurrencyCodeCommand setUsername(String username) {
         this.username = username;
-        return this;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public GetCurrencyCodeCommand setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-        return this;
-    }
-
-    public String getWebstoreAPILocation() {
-        return webstoreAPILocation;
-    }
-
-    public GetCurrencyCodeCommand setWebstoreAPILocation(String webstoreAPILocation) {
-        this.webstoreAPILocation = webstoreAPILocation;
         return this;
     }
 }

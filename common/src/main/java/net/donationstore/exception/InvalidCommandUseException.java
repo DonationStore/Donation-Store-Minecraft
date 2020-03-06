@@ -1,12 +1,12 @@
 package net.donationstore.exception;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class InvalidCommandUseException extends RuntimeException {
 
-    public ArrayList<String> logs;
+    public List<String> logs;
 
-    public InvalidCommandUseException(ArrayList<String> logs) {
+    public InvalidCommandUseException(List<String> logs) {
         this.logs = logs;
     }
 

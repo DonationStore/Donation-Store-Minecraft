@@ -2,22 +2,26 @@ package net.donationstore.commands;
 
 import java.util.ArrayList;
 
-public class HelpCommand implements Command {
+public class HelpCommand extends AbstractCommand {
 
-    private ArrayList<String> logs;
-
-    public HelpCommand() {
-        logs = new ArrayList<>();
+    @Override
+    public String getSupportedCommand() {
+        return "help";
     }
 
     @Override
-    public ArrayList<String> runCommand(String[] args) {
-        logs.add("/ds currency-balances : Gets your virtual currency balances");
-        logs.add("/ds currency-code : Generates a virtual currency code");
-        logs.add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
-        logs.add("/ds help : Runs the help command");
+    public Command validate(String[] args) {
+        return this;
+    }
 
-        return logs;
+    @Override
+    public ArrayList<String> runCommand() {
+        getLogs().add("/ds currency-balances : Gets your virtual currency balances");
+        getLogs().add("/ds currency-code : Generates a virtual currency code");
+        getLogs().add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
+        getLogs().add("/ds help : Runs the help command");
+
+        return getLogs();
     }
 
     @Override
