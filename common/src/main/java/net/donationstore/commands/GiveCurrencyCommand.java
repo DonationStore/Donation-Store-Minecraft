@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GiveCurrencyCommand extends AbstractCommand {
+public class GiveCurrencyCommand extends AbstractApiCommand {
 
     @JsonProperty("amount")
     private String amount;

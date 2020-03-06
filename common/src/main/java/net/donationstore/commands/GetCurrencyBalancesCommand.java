@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetCurrencyBalancesCommand extends AbstractCommand {
+public class GetCurrencyBalancesCommand extends AbstractApiCommand {
 
     @JsonProperty("username")
     private String username;

@@ -11,7 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class ConnectCommand extends AbstractCommand {
+public class ConnectCommand extends AbstractApiCommand {
 
     private String secretKey;
 

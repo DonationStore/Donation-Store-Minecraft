@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetCurrencyCodeCommand extends AbstractCommand {
+public class GetCurrencyCodeCommand extends AbstractApiCommand {
     
     private String username;
 
