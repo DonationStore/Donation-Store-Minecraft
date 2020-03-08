@@ -1,5 +1,7 @@
 package net.donationstore.commands;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.donationstore.dto.WebstoreAPIResponseDTO;
 import net.donationstore.http.WebstoreHTTPClient;
 
 import java.net.http.HttpClient;
@@ -7,7 +9,11 @@ import java.util.ArrayList;
 
 public abstract class AbstractApiCommand extends AbstractCommand {
 
+    @JsonIgnore
     private WebstoreHTTPClient webstoreHTTPClient;
+
+    @JsonIgnore
+    private Class webstoreAPIResponseDTO;
 
     public AbstractApiCommand() {
         super();
@@ -32,4 +38,11 @@ public abstract class AbstractApiCommand extends AbstractCommand {
         return webstoreHTTPClient;
     }
 
+    public Class getWebstoreAPIResponseDTO() {
+        return webstoreAPIResponseDTO;
+    }
+
+    public void setWebstoreAPIResponseDTO(Class webstoreAPIResponseDTO) {
+        this.webstoreAPIResponseDTO = webstoreAPIResponseDTO;
+    }
 }

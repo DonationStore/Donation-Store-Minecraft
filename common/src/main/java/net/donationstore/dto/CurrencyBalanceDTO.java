@@ -8,11 +8,11 @@ import java.util.UUID;
 public class CurrencyBalanceDTO {
 
     @JsonProperty("username")
-    private String username;
+    public String username;
 
     @JsonProperty("uuid")
-    private UUID uuid;
+    public UUID uuid;
 
     @JsonProperty("balances")
-    private Map<String, Object> balances;
+    public Map<String, Object> balances;
 }

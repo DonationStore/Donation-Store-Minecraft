@@ -2,7 +2,9 @@ package net.donationstore.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.donationstore.commands.AbstractApiCommand;
 import net.donationstore.commands.Command;
+import net.donationstore.dto.GatewayResponse;
 import net.donationstore.dto.WebstoreAPIResponseDTO;
 import net.donationstore.exception.WebstoreAPIException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -18,9 +20,9 @@ import java.util.ArrayList;
 public class WebstoreHTTPClient {
 
     private String secretKey;
-    private HttpClient httpClient;
+    public HttpClient httpClient;
     private ArrayList<String> logs;
-    private ObjectMapper objectMapper;
+    public ObjectMapper objectMapper;
     private String webstoreAPILocation;
 
     public WebstoreHTTPClient() {
@@ -59,9 +61,9 @@ public class WebstoreHTTPClient {
      it.
      */
     // This is responsible for taking a command, executing it and returning back a gateway response (or webstore API response API response) as the object
-    public WebstoreAPIResponseDTO get(Command command, String resource) throws WebstoreAPIException {
+    public GatewayResponse get(AbstractApiCommand command, String resource) throws WebstoreAPIException {
 
-        WebstoreAPIResponseDTO webstoreAPIResponseDTO = new WebstoreAPIResponseDTO();
+        GatewayResponse gatewayResponse = new GatewayResponse();
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -69,7 +71,7 @@ public class WebstoreHTTPClient {
                     .header("Secret-Key", secretKey)
                     .build();
 
-            webstoreAPIResponseDTO.setBody(objectMapper.readValue(httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body(), command.getClass()));
+            gatewayResponse.setBody(objectMapper.readValue(sendHttpRequest(httpClient, request), command.getWebstoreAPIResponseDTO()));
         } catch (IOException exception) {
             throw generateException("IOException", command.getSupportedCommand(), exception);
         } catch (InterruptedException exception) {
@@ -78,12 +80,12 @@ public class WebstoreHTTPClient {
             throw generateException("URISyntaxException", command.getSupportedCommand(), exception);
         }
 
-        return webstoreAPIResponseDTO;
+        return gatewayResponse;
     }
 
-    public WebstoreAPIResponseDTO post(Command command, String resource) throws WebstoreAPIException {
+    public GatewayResponse post(AbstractApiCommand command, String resource) throws WebstoreAPIException {
 
-        WebstoreAPIResponseDTO webstoreAPIResponseDTO = new WebstoreAPIResponseDTO();
+        GatewayResponse gatewayResponse = new GatewayResponse();
 
         try {
             String requestBody = objectMapper.writeValueAsString(command);
@@ -94,7 +96,7 @@ public class WebstoreHTTPClient {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            webstoreAPIResponseDTO.setBody(objectMapper.readValue(httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body(), command.getClass()));
+            gatewayResponse.setBody(objectMapper.readValue(sendHttpRequest(httpClient, request), command.getWebstoreAPIResponseDTO()));
         } catch (IOException exception) {
             throw generateException("IOException", command.getSupportedCommand(), exception);
         } catch (InterruptedException exception) {
@@ -103,16 +105,20 @@ public class WebstoreHTTPClient {
             throw generateException("URISyntaxException", command.getSupportedCommand(), exception);
         }
 
-        return webstoreAPIResponseDTO;
+        return gatewayResponse;
     }
 
-    private WebstoreAPIException generateException(String exceptionType, String command, Exception exception) {
+    public WebstoreAPIException generateException(String exceptionType, String command, Exception exception) {
         logs.add(String.format("%s exception when contacting the webstore API when running the %s command", exceptionType, command));
         logs.add(ExceptionUtils.getStackTrace(exception));
         return new WebstoreAPIException(logs);
     }
 
-    private URI getAPIUrl(String resource) throws URISyntaxException {
+    public URI getAPIUrl(String resource) throws URISyntaxException {
         return new URI(String.format("%s/%s", webstoreAPILocation, resource));
+    }
+
+    public String sendHttpRequest(HttpClient client, HttpRequest request) throws IOException, InterruptedException {
+        return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
     }
 }

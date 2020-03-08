@@ -1,13 +1,5 @@
 package net.donationstore.dto;
 
 public class WebstoreAPIResponseDTO {
-    private Object body;
-
-    public Object getBody() {
-        return body;
-    }
-
-    public void setBody(Object body) {
-        this.body = body;
-    }
+    // Generic DTO that represents the message or whatever that needs to come back
 }

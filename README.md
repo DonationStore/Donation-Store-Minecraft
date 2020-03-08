@@ -23,3 +23,10 @@ when you want. It will be reviewed whenever we have the chance by a developer. P
 plugins are open source, the core Donation Store application is a product, meaning that this plugin (while not sold with the
 main application), is needed to fulfill the abilities of the core app. By your PR being merged you agree to give us a
 perpetual, royalty free irrevocable to use and relicense the code and even sell it on under any terms. 
+
+##### Contribution Notes
+Any pull requests that are opened must follow the following criteria in order to be considered for merging:
+
+- The code will be analysed by Sonar. You can install Sonar Lint on IntelliJ. Use it before you submit.
+- Any code added must have >= 90% unit test code coverage or else it will not be considered.
+ 

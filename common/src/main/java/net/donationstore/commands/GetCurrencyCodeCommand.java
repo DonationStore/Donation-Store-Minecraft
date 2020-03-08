@@ -1,5 +1,8 @@
 package net.donationstore.commands;
 
+import net.donationstore.dto.CurrencyCodeDTO;
+import net.donationstore.dto.GatewayResponse;
+import net.donationstore.dto.InformationDTO;
 import net.donationstore.dto.WebstoreAPIResponseDTO;
 import net.donationstore.exception.InvalidCommandUseException;
 
@@ -7,7 +10,7 @@ import java.util.ArrayList;
 
 public class GetCurrencyCodeCommand extends AbstractApiCommand {
     
-    private String username;
+    private String uuid;
 
     @Override
     public String getSupportedCommand() {
@@ -16,7 +19,7 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 4) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
             throw new InvalidCommandUseException(getLogs());
@@ -25,14 +28,16 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setUsername(args[3]);
+        setWebstoreAPIResponseDTO(CurrencyCodeDTO.class);
+
+        setUUID(args[3]);
         return this;
     }
 
     @Override
     public ArrayList<String> runCommand() throws Exception {
 
-        WebstoreAPIResponseDTO webstoreAPIResponseDTO = getWebstoreHTTPClient().post(this, "currency/code/generate");
+        GatewayResponse gatewayResponse = getWebstoreHTTPClient().post(this, "currency/code/generate");
 
         // Do stuff with the body
         return getLogs();
@@ -48,12 +53,12 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
         return CommandType.PLAYER;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUUUID() {
+        return uuid;
     }
 
-    public GetCurrencyCodeCommand setUsername(String username) {
-        this.username = username;
+    public GetCurrencyCodeCommand setUUID(String uuid) {
+        this.uuid = uuid;
         return this;
     }
 }
