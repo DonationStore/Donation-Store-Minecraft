@@ -2,17 +2,12 @@ package net.donationstore.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.donationstore.commands.*;
-import net.donationstore.dto.CurrencyBalanceDTO;
-import net.donationstore.dto.CurrencyCodeDTO;
-import net.donationstore.dto.GatewayResponse;
-import net.donationstore.dto.InformationDTO;
+import net.donationstore.dto.*;
 import net.donationstore.exception.WebstoreAPIException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.rules.ExpectedException;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -22,14 +17,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -37,6 +28,9 @@ public class WebstoreHTTPClientTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Spy
     public WebstoreHTTPClient webstoreHTTPClient;
@@ -48,7 +42,6 @@ public class WebstoreHTTPClientTest {
 
     @Before
     public void setup() {
-        //webstoreHTTPClient = new WebstoreHTTPClient();
 
         httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
@@ -111,7 +104,7 @@ public class WebstoreHTTPClientTest {
         // given
         doReturn("{\"username\": \"MCxJB\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\", \"balances\": {\"EUR\": \"1.00\"}}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         GetCurrencyBalancesCommand getCurrencyBalancesCommand = new GetCurrencyBalancesCommand();
-        getCurrencyBalancesCommand.validate(new String[]{"balance", "secretKey", "https://example.com", "28408e375b7d4c6db723b7a845418dcd"});
+        getCurrencyBalancesCommand.validate(new String[]{"balance", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.post(getCurrencyBalancesCommand, "currency/balances");
@@ -128,7 +121,7 @@ public class WebstoreHTTPClientTest {
         // given
         doReturn("{\"code\": \"D3CRWAZ47A\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         GetCurrencyCodeCommand getCurrencyCodeCommand = new GetCurrencyCodeCommand();
-        getCurrencyCodeCommand.validate(new String[]{"code", "secretKey", "https://example.com", "28408e375b7d4c6db723b7a845418dcd"});
+        getCurrencyCodeCommand.validate(new String[]{"code", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.post(getCurrencyCodeCommand, "currency/code/generate");
@@ -142,16 +135,29 @@ public class WebstoreHTTPClientTest {
     @Test
     public void giveCurrencyCodeTest() throws Exception {
         // given
-        // Come back to when the API is more standardised, because now it needs a bit of work
+        doReturn("{\"message\": \"10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        GiveCurrencyCommand giveCurrencyCommand = new GiveCurrencyCommand();
+        giveCurrencyCommand.validate(new String[]{"give", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
+
+        // when
+        GatewayResponse gatewayResponse = webstoreHTTPClient.post(giveCurrencyCommand, "currency/give");
+        GiveCurrencyDTO giveCurrencyDTO = (GiveCurrencyDTO) gatewayResponse.getBody();
+
+        // then
+        assertEquals("10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyDTO.message);
     }
 
     @Test
-    public void postRequestTest() {
+    public void ioExceptionTest() throws Exception {
+        // then
+        thrown.expect(WebstoreAPIException.class);
+        doThrow(IOException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        ConnectCommand connect = new ConnectCommand();
+        connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
 
-    }
-
-    @Test
-    public void ioExceptionTest() {
+        // when
+        GatewayResponse gatewayResponse = webstoreHTTPClient.get(connect, "information");
+        InformationDTO informationDTO = (InformationDTO) gatewayResponse.getBody();
 
     }
 

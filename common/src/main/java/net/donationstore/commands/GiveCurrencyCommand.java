@@ -3,6 +3,7 @@ package net.donationstore.commands;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.donationstore.dto.GatewayResponse;
+import net.donationstore.dto.GiveCurrencyDTO;
 import net.donationstore.dto.WebstoreAPIResponseDTO;
 import net.donationstore.exception.InvalidCommandUseException;
 
@@ -13,8 +14,8 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
     @JsonProperty("amount")
     private String amount;
 
-    @JsonProperty("username")
-    private String username;
+    @JsonProperty("uuid")
+    private String uuid;
 
     @JsonProperty("currency-code")
     private String currencyCode;
@@ -26,7 +27,7 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 5) {
+        if (args.length != 6) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
             throw new InvalidCommandUseException(getLogs());
@@ -35,11 +36,11 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setWebstoreAPIResponseDTO(WebstoreAPIResponseDTO.class);
+        setWebstoreAPIResponseDTO(GiveCurrencyDTO.class);
 
-        setCurrencyCode(args[3]);
-        setAmount(args[4]);
-        setUsername(args[5]);
+        setUUID(args[3]);
+        setCurrencyCode(args[4]);
+        setAmount(args[5]);
 
         return this;
     }
@@ -73,12 +74,12 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
         return this;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUUID() {
+        return uuid;
     }
 
-    public GiveCurrencyCommand setUsername(String username) {
-        this.username = username;
+    public GiveCurrencyCommand setUUID(String uuid) {
+        this.uuid = uuid;
         return this;
     }
 
