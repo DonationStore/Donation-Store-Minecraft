@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-public class InformationDTO implements WebstoreAPIResponseDTO {
+public class InformationDTO {
     @JsonProperty("webstore")
     public Map<String, Object> webstore;
 

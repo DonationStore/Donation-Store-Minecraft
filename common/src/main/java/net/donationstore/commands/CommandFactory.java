@@ -28,9 +28,11 @@ public class CommandFactory {
 
         String command = args[0];
 
+        // Is either optional or not
+        // If it is, then the optional object will just be like "Yea it is there" if not it won't
         Optional<Command> commandRunner = commandList.stream().filter(c -> c.getSupportedCommand().equals(command)).findFirst();
         return commandRunner.map(
-                c -> c.validate(args)).orElseThrow(() -> {
+                c -> c.validate(Arrays.copyOfRange(args, 1, args.length))).orElseThrow(() -> {
             logs.add("That command doesn't exist.");
             throw new InvalidCommandUseException(logs);
         });

@@ -1,18 +1,9 @@
 package net.donationstore.commands;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import net.donationstore.dto.WebstoreAPIResponseDTO;
 import net.donationstore.exception.InvalidCommandUseException;
-import net.donationstore.exception.WebstoreAPIException;
-import net.donationstore.util.FormUtil;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GetCurrencyCodeCommand extends AbstractApiCommand {
     
@@ -31,44 +22,19 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
             throw new InvalidCommandUseException(getLogs());
         }
 
-        setSecretKey(args[1]);
-        setWebstoreAPILocation(args[2]);
+        getWebstoreHTTPClient().setSecretKey(args[0])
+                .setWebstoreAPILocation(args[1]);
+
         setUsername(args[3]);
         return this;
     }
 
     @Override
     public ArrayList<String> runCommand() throws Exception {
-        Map<String, String> data = new HashMap<>();
-        data.put("username", getUsername());
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format("%s/generate-currency-code", getWebstoreAPILocation())))
-                .header("secret-key", getSecretKey())
-                .POST(FormUtil.ofFormData(data))
-                .build();
+        WebstoreAPIResponseDTO webstoreAPIResponseDTO = getWebstoreHTTPClient().post(this, "currency/code/generate");
 
-        try {
-            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JsonObject jsonResponse = new JsonParser().parse(response.body()).getAsJsonObject();
-
-                String code = jsonResponse.get("code").getAsString();
-
-                getLogs().add(String.format("Virtual Currency Claim Code: %s", code));
-                getLogs().add("This will expire in 5 minutes");
-            } else {
-                getLogs().add("Invalid webstore API response:");
-                getLogs().add(response.body());
-                throw new WebstoreAPIException(getLogs());
-            }
-        } catch (IOException exception) {
-            throw new IOException("IOException when contacting the webstore API when running the get currency code command.");
-        } catch (InterruptedException exception) {
-            throw new InterruptedException("InterruptedException when contacting the webstore API when running the get currency code command.");
-        }
-
+        // Do stuff with the body
         return getLogs();
     }
 

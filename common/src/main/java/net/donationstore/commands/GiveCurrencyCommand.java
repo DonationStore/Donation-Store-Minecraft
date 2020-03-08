@@ -1,19 +1,11 @@
 package net.donationstore.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import net.donationstore.exception.InvalidCommandUseException;
-import net.donationstore.exception.WebstoreAPIException;
-import net.donationstore.util.FormUtil;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import net.donationstore.dto.WebstoreAPIResponseDTO;
+import net.donationstore.exception.InvalidCommandUseException;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GiveCurrencyCommand extends AbstractApiCommand {
 
@@ -39,8 +31,9 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
             throw new InvalidCommandUseException(getLogs());
         }
 
-        setSecretKey(args[1]);
-        setWebstoreAPILocation(args[2]);
+        getWebstoreHTTPClient().setSecretKey(args[0])
+                .setWebstoreAPILocation(args[1]);
+
         setCurrencyCode(args[3]);
         setAmount(args[4]);
         setUsername(args[5]);
@@ -50,35 +43,10 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
 
     @Override
     public ArrayList<String> runCommand() throws Exception {
-        Map<String, String> data = new HashMap<>();
-        data.put("username", username);
-        data.put("currency_code", currencyCode);
-        data.put("amount", amount);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format("%s/get-currency-balances", getWebstoreAPILocation())))
-                .header("secret-key", getSecretKey())
-                .POST(FormUtil.ofFormData(data))
-                .build();
+        WebstoreAPIResponseDTO webstoreAPIResponseDTO = getWebstoreHTTPClient().post(this, "currency/give");
 
-        try {
-            HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JsonObject jsonResponse = new JsonParser().parse(response.body()).getAsJsonObject();
-
-                getLogs().add(jsonResponse.get("message").getAsString());
-
-            } else {
-                getLogs().add("Invalid webstore API response:");
-                getLogs().add(response.body());
-                throw new WebstoreAPIException(getLogs());
-            }
-        } catch (IOException exception) {
-            throw new IOException("IOException when contacting the webstore API when running the give currency command.");
-        } catch (InterruptedException exception) {
-            throw new InterruptedException("InterruptedException when contacting the webstore API when running the give currency command.");
-        }
+        // Do stuff with the body
 
         return getLogs();
     }

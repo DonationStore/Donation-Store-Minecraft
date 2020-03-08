@@ -7,7 +7,6 @@ import com.google.gson.JsonParser;
 import net.donationstore.dto.CommandExectionPayloadDTO;
 import net.donationstore.dto.QueueDTO;
 import net.donationstore.exception.WebstoreAPIException;
-import net.donationstore.util.FormUtil;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,7 +14,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class CommandManager {
@@ -44,7 +42,7 @@ public class CommandManager {
         logs = commandFactory.getCommand(args).runCommand();
     }
 
-    public boolean updateCommandsToExecuted(String secretKey, String webstoreAPILocation, ArrayList<String> commands) throws Exception {
+/*    public boolean updateCommandsToExecuted(String secretKey, String webstoreAPILocation, ArrayList<String> commands) throws Exception {
         Map<String, String> data = new HashMap<>();
         data.put("commands", commands.toString());
 
@@ -68,7 +66,7 @@ public class CommandManager {
         }
 
         return true;
-    }
+    }*/
 
     public QueueDTO getCommands(String secretKey, String webstoreAPILocation) throws Exception {
 

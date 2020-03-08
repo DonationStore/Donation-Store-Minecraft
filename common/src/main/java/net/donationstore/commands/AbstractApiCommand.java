@@ -1,21 +1,17 @@
 package net.donationstore.commands;
 
+import net.donationstore.http.WebstoreHTTPClient;
+
 import java.net.http.HttpClient;
 import java.util.ArrayList;
 
 public abstract class AbstractApiCommand extends AbstractCommand {
 
-    private String secretKey;
-
-    private String webstoreAPILocation;
-
-    private HttpClient httpClient;
+    private WebstoreHTTPClient webstoreHTTPClient;
 
     public AbstractApiCommand() {
         super();
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+        webstoreHTTPClient = new WebstoreHTTPClient();
     }
 
     public abstract String getSupportedCommand();
@@ -32,24 +28,8 @@ public abstract class AbstractApiCommand extends AbstractCommand {
         return "Invalid usage of command. Help Info: ";
     }
 
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public String getWebstoreAPILocation() {
-        return webstoreAPILocation;
-    }
-
-    public void setWebstoreAPILocation(String webstoreAPILocation) {
-        this.webstoreAPILocation = webstoreAPILocation;
-    }
-
-    public HttpClient getHttpClient() {
-        return httpClient;
+    public WebstoreHTTPClient getWebstoreHTTPClient() {
+        return webstoreHTTPClient;
     }
 
 }

@@ -4,9 +4,7 @@ import net.donationstore.commands.CommandFactory;
 import net.donationstore.commands.CommandManager;
 import net.donationstore.dto.CommandExectionPayloadDTO;
 import net.donationstore.dto.QueueDTO;
-import net.donationstore.exception.CommandNotFoundException;
-import net.donationstore.exception.InvalidCommandUseException;
-import net.donationstore.exception.WebstoreAPIException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -56,9 +53,9 @@ public class DonationStorePlugin extends JavaPlugin {
                         }
                     }
                     // Make request back with executed commands
-                    if (commandManager.updateCommandsToExecuted("secretKey", "webstoreAPILocation", executedCommands)) {
+                    /*if (commandManager.updateCommandsToExecuted("secretKey", "webstoreAPILocation", executedCommands)) {
                         // Do something
-                    }
+                    }*/
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
