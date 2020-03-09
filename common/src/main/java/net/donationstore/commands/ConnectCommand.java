@@ -36,7 +36,10 @@ public class ConnectCommand extends AbstractApiCommand {
                 buildDefaultRequest("information", HttpMethod.GET, null),
                 InformationResponse.class);
 
-        // Do stuff with the body. For the most part it's all logs.
+        InformationResponse informationResponse = (InformationResponse) gatewayResponse.getBody();
+
+        addLog(String.format("Connected to webstore %s", informationResponse.getWebstore().get("name")));
+        addLog("Donation Store will now start retrieving commands occasionally");
 
         return getLogs();
     }

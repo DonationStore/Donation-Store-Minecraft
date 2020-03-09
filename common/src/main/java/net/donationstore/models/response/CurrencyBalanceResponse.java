@@ -8,11 +8,38 @@ import java.util.UUID;
 public class CurrencyBalanceResponse {
 
     @JsonProperty("username")
-    public String username;
+    private String username;
 
     @JsonProperty("uuid")
-    public UUID uuid;
+    private UUID uuid;
 
     @JsonProperty("balances")
-    public Map<String, Object> balances;
+    private Map<String, Object> balances;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public CurrencyBalanceResponse setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public CurrencyBalanceResponse setUuid(UUID uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+
+    public Map<String, Object> getBalances() {
+        return balances;
+    }
+
+    public CurrencyBalanceResponse setBalances(Map<String, Object> balances) {
+        this.balances = balances;
+        return this;
+    }
 }

@@ -45,7 +45,9 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
                 buildDefaultRequest("currency/give", HttpMethod.POST, giveCurrencyRequest),
                 GiveCurrencyResponse.class);
 
-        // Do stuff with the body
+        GiveCurrencyResponse giveCurrencyResponse = (GiveCurrencyResponse) gatewayResponse.getBody();
+
+        addLog(giveCurrencyResponse.getMessage());
 
         return getLogs();
     }

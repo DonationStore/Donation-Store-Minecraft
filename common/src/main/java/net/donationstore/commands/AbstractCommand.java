@@ -31,6 +31,10 @@ public abstract class AbstractCommand implements Command {
         return "Invalid usage of command. Help Info: ";
     }
 
+    public void addLog(String log) {
+        logs.add(log);
+    }
+
     public ArrayList<String> getLogs() {
         return logs;
     }

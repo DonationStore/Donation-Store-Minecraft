@@ -80,11 +80,11 @@ public class WebstoreHTTPClientTest {
         InformationResponse informationResponse = (InformationResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals(informationResponse.webstore.get("currency"), "EUR");
-        assertEquals(informationResponse.webstore.get("id"), 1);
-        assertEquals(informationResponse.webstore.get("name"), "Example Store");
-        assertEquals(informationResponse.server.get("ip"), "127.0.0.1");
-        assertEquals(informationResponse.server.get("name"), "Hello World");
+        assertEquals(informationResponse.getWebstore().get("currency"), "EUR");
+        assertEquals(informationResponse.getWebstore().get("id"), 1);
+        assertEquals(informationResponse.getWebstore().get("name"), "Example Store");
+        assertEquals(informationResponse.getServer().get("ip"), "127.0.0.1");
+        assertEquals(informationResponse.getServer().get("name"), "Hello World");
     }
 
     @Test
@@ -99,9 +99,9 @@ public class WebstoreHTTPClientTest {
         CurrencyBalanceResponse currencyBalanceResponse = (CurrencyBalanceResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("MCxJB", currencyBalanceResponse.username);
-        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyBalanceResponse.uuid);
-        assertEquals("1.00", currencyBalanceResponse.balances.get("EUR"));
+        assertEquals("MCxJB", currencyBalanceResponse.getUsername());
+        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyBalanceResponse.getUuid());
+        assertEquals("1.00", currencyBalanceResponse.getBalances().get("EUR"));
     }
 
     @Test
@@ -116,8 +116,8 @@ public class WebstoreHTTPClientTest {
         CurrencyCodeResponse currencyCodeResponse = (CurrencyCodeResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("D3CRWAZ47A", currencyCodeResponse.code);
-        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyCodeResponse.uuid);
+        assertEquals("D3CRWAZ47A", currencyCodeResponse.getCode());
+        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyCodeResponse.getUuid());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class WebstoreHTTPClientTest {
         GiveCurrencyResponse giveCurrencyResponseDTO = (GiveCurrencyResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyResponseDTO.message);
+        assertEquals("10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyResponseDTO.getMessage());
     }
 
     @Test

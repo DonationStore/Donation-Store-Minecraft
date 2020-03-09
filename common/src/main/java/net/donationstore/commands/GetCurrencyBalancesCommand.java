@@ -3,6 +3,7 @@ package net.donationstore.commands;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.donationstore.models.request.CurrencyBalanceRequest;
 import net.donationstore.models.response.CurrencyBalanceResponse;
+import net.donationstore.models.response.CurrencyCodeResponse;
 import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
@@ -43,6 +44,11 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
                 buildDefaultRequest("currency/balances", HttpMethod.POST, currencyBalanceRequest),
                 CurrencyBalanceResponse.class);
 
+        CurrencyBalanceResponse currencyBalanceResponse = (CurrencyBalanceResponse) gatewayResponse.getBody();
+
+        for(String key: currencyBalanceResponse.getBalances().keySet()) {
+            addLog(String.format("%s: %s", key, currencyBalanceResponse.getBalances().get(key)));
+        }
 
         return getLogs();
     }

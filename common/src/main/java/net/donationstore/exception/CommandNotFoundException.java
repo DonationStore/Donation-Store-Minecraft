@@ -1,12 +1,12 @@
 package net.donationstore.exception;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CommandNotFoundException extends RuntimeException {
 
-    public ArrayList<String> logs;
+    public List<String> logs;
 
-    public CommandNotFoundException(ArrayList<String> logs) {
+    public CommandNotFoundException(List<String> logs) {
         this.logs = logs;
     }
 

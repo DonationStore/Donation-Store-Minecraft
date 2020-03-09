@@ -41,7 +41,10 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
                 buildDefaultRequest("currency/code/generate", HttpMethod.POST, currencyCodeRequest),
                 CurrencyCodeResponse.class);
 
-        // Do stuff with the body
+        CurrencyCodeResponse currencyCodeResponse = (CurrencyCodeResponse) gatewayResponse.getBody();
+
+        addLog(String.format("Currency Code: %s", currencyCodeResponse.getCode()));
+
         return getLogs();
     }
 

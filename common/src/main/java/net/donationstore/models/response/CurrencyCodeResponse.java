@@ -7,8 +7,26 @@ import java.util.UUID;
 public class CurrencyCodeResponse {
 
     @JsonProperty("code")
-    public String code;
+    private String code;
 
     @JsonProperty("uuid")
-    public UUID uuid;
+    private UUID uuid;
+
+    public String getCode() {
+        return code;
+    }
+
+    public CurrencyCodeResponse setCode(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public CurrencyCodeResponse setUuid(UUID uuid) {
+        this.uuid = uuid;
+        return this;
+    }
 }
