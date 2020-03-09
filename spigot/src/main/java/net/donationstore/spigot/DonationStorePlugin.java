@@ -2,8 +2,8 @@ package net.donationstore.spigot;
 
 import net.donationstore.commands.CommandFactory;
 import net.donationstore.commands.CommandManager;
-import net.donationstore.dto.CommandExectionPayloadDTO;
-import net.donationstore.dto.QueueDTO;
+import net.donationstore.models.CommandExectionPayloadDTO;
+import net.donationstore.models.QueueDTO;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

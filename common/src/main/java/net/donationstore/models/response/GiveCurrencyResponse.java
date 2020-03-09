@@ -1,8 +1,8 @@
-package net.donationstore.dto;
+package net.donationstore.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GiveCurrencyDTO {
+public class GiveCurrencyResponse {
 
     @JsonProperty("message")
     public String message;

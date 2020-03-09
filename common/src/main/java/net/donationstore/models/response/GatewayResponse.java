@@ -1,4 +1,4 @@
-package net.donationstore.dto;
+package net.donationstore.models.response;
 
 public class GatewayResponse<T> {
     // Code field, to check if successful etc because this is returned back to the command

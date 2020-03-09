@@ -2,9 +2,10 @@ package net.donationstore.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.donationstore.commands.*;
-import net.donationstore.dto.*;
 import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.ClientException;
+import net.donationstore.models.request.GatewayRequest;
+import net.donationstore.models.response.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -75,15 +76,15 @@ public class WebstoreHTTPClientTest {
         connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationDTO.class);
-        InformationDTO informationDTO = (InformationDTO) gatewayResponse.getBody();
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationResponse.class);
+        InformationResponse informationResponse = (InformationResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals(informationDTO.webstore.get("currency"), "EUR");
-        assertEquals(informationDTO.webstore.get("id"), 1);
-        assertEquals(informationDTO.webstore.get("name"), "Example Store");
-        assertEquals(informationDTO.server.get("ip"), "127.0.0.1");
-        assertEquals(informationDTO.server.get("name"), "Hello World");
+        assertEquals(informationResponse.webstore.get("currency"), "EUR");
+        assertEquals(informationResponse.webstore.get("id"), 1);
+        assertEquals(informationResponse.webstore.get("name"), "Example Store");
+        assertEquals(informationResponse.server.get("ip"), "127.0.0.1");
+        assertEquals(informationResponse.server.get("name"), "Hello World");
     }
 
     @Test
@@ -94,13 +95,13 @@ public class WebstoreHTTPClientTest {
         getCurrencyBalancesCommand.validate(new String[]{"balance", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/balances", HttpMethod.POST), CurrencyBalanceDTO.class);
-        CurrencyBalanceDTO currencyBalanceDTO = (CurrencyBalanceDTO) gatewayResponse.getBody();
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/balances", HttpMethod.POST), CurrencyBalanceResponse.class);
+        CurrencyBalanceResponse currencyBalanceResponse = (CurrencyBalanceResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("MCxJB", currencyBalanceDTO.username);
-        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyBalanceDTO.uuid);
-        assertEquals("1.00", currencyBalanceDTO.balances.get("EUR"));
+        assertEquals("MCxJB", currencyBalanceResponse.username);
+        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyBalanceResponse.uuid);
+        assertEquals("1.00", currencyBalanceResponse.balances.get("EUR"));
     }
 
     @Test
@@ -111,12 +112,12 @@ public class WebstoreHTTPClientTest {
         getCurrencyCodeCommand.validate(new String[]{"code", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/code/generate", HttpMethod.POST), CurrencyCodeDTO.class);
-        CurrencyCodeDTO currencyCodeDTO = (CurrencyCodeDTO) gatewayResponse.getBody();
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/code/generate", HttpMethod.POST), CurrencyCodeResponse.class);
+        CurrencyCodeResponse currencyCodeResponse = (CurrencyCodeResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("D3CRWAZ47A", currencyCodeDTO.code);
-        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyCodeDTO.uuid);
+        assertEquals("D3CRWAZ47A", currencyCodeResponse.code);
+        assertEquals(UUID.fromString("28408e37-5b7d-4c6d-b723-b7a845418dcd"), currencyCodeResponse.uuid);
     }
 
     @Test
@@ -127,11 +128,11 @@ public class WebstoreHTTPClientTest {
         giveCurrencyCommand.validate(new String[]{"give", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/give", HttpMethod.POST), GiveCurrencyDTO.class);
-        GiveCurrencyDTO giveCurrencyDTO = (GiveCurrencyDTO) gatewayResponse.getBody();
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/give", HttpMethod.POST), GiveCurrencyResponse.class);
+        GiveCurrencyResponse giveCurrencyResponseDTO = (GiveCurrencyResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyDTO.message);
+        assertEquals("10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyResponseDTO.message);
     }
 
     @Test
@@ -143,8 +144,8 @@ public class WebstoreHTTPClientTest {
         connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationDTO.class);
-        InformationDTO informationDTO = (InformationDTO) gatewayResponse.getBody();
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationResponse.class);
+        InformationResponse informationResponse = (InformationResponse) gatewayResponse.getBody();
 
     }
 

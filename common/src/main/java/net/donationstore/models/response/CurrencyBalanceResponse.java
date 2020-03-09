@@ -1,11 +1,11 @@
-package net.donationstore.dto;
+package net.donationstore.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class CurrencyBalanceDTO {
+public class CurrencyBalanceResponse {
 
     @JsonProperty("username")
     public String username;

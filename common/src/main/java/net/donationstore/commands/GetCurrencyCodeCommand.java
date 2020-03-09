@@ -1,7 +1,8 @@
 package net.donationstore.commands;
 
-import net.donationstore.dto.CurrencyCodeDTO;
-import net.donationstore.dto.GatewayResponse;
+import net.donationstore.models.request.CurrencyCodeRequest;
+import net.donationstore.models.response.CurrencyCodeResponse;
+import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class GetCurrencyCodeCommand extends AbstractApiCommand {
     
-    private String uuid;
+    private CurrencyCodeRequest currencyCodeRequest;
 
     @Override
     public String getSupportedCommand() {
@@ -28,7 +29,8 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setUUID(args[3]);
+        currencyCodeRequest = new CurrencyCodeRequest();
+        currencyCodeRequest.setUuid(args[3]);
         return this;
     }
 
@@ -36,8 +38,8 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("currency/code/generate", HttpMethod.POST),
-                CurrencyCodeDTO.class);
+                buildDefaultRequest("currency/code/generate", HttpMethod.POST, currencyCodeRequest),
+                CurrencyCodeResponse.class);
 
         // Do stuff with the body
         return getLogs();
@@ -51,14 +53,5 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
     @Override
     public CommandType commandType() {
         return CommandType.PLAYER;
-    }
-
-    public String getUUUID() {
-        return uuid;
-    }
-
-    public GetCurrencyCodeCommand setUUID(String uuid) {
-        this.uuid = uuid;
-        return this;
     }
 }

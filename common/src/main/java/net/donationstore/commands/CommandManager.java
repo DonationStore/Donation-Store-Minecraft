@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import net.donationstore.dto.CommandExectionPayloadDTO;
-import net.donationstore.dto.QueueDTO;
+import net.donationstore.models.CommandExectionPayloadDTO;
+import net.donationstore.models.QueueDTO;
 import net.donationstore.exception.WebstoreAPIException;
 
 import java.io.IOException;

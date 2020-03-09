@@ -1,10 +1,10 @@
-package net.donationstore.dto;
+package net.donationstore.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-public class InformationDTO {
+public class InformationResponse {
     @JsonProperty("webstore")
     public Map<String, Object> webstore;
 

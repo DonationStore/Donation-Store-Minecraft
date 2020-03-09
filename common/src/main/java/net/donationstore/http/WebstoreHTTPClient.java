@@ -1,8 +1,8 @@
 package net.donationstore.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.donationstore.dto.GatewayRequest;
-import net.donationstore.dto.GatewayResponse;
+import net.donationstore.models.request.GatewayRequest;
+import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.exception.ClientException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 

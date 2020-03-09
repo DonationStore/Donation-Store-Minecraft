@@ -1,7 +1,7 @@
 package net.donationstore.commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.donationstore.dto.GatewayRequest;
+import net.donationstore.models.request.GatewayRequest;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
 import net.donationstore.http.WebstoreHTTPClient;
@@ -71,7 +71,7 @@ public abstract class AbstractApiCommand<T> extends AbstractCommand {
         return headers;
     }
 
-    public GatewayRequest buildDefaultRequest(String resourceUrl, HttpMethod method) throws URISyntaxException {
+    public GatewayRequest buildDefaultRequest(String resourceUrl, HttpMethod method, Object body) throws URISyntaxException {
         GatewayRequest request = new GatewayRequest();
         request.setUri(getWebstoreApiLocation() + resourceUrl);
         request.setMethod(method);

@@ -1,8 +1,9 @@
 package net.donationstore.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.donationstore.dto.CurrencyBalanceDTO;
-import net.donationstore.dto.GatewayResponse;
+import net.donationstore.models.request.CurrencyBalanceRequest;
+import net.donationstore.models.response.CurrencyBalanceResponse;
+import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -12,8 +13,7 @@ import java.util.ArrayList;
 
 public class GetCurrencyBalancesCommand extends AbstractApiCommand {
 
-    @JsonProperty("uuid")
-    private String uuid;
+    private CurrencyBalanceRequest currencyBalanceRequest;
 
     @Override
     public String getSupportedCommand() {
@@ -31,7 +31,8 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setUUID(args[3]);
+        currencyBalanceRequest = new CurrencyBalanceRequest();
+        currencyBalanceRequest.setUuid(args[3]);
         return this;
     }
 
@@ -39,9 +40,10 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("currency/balances", HttpMethod.POST),
-                CurrencyBalanceDTO.class);
-        // Do stuff with the body
+                buildDefaultRequest("currency/balances", HttpMethod.POST, currencyBalanceRequest),
+                CurrencyBalanceResponse.class);
+
+
         return getLogs();
     }
 
@@ -55,12 +57,4 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
         return CommandType.PLAYER;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public GetCurrencyBalancesCommand setUUID(String uuid) {
-        this.uuid = uuid;
-        return this;
-    }
 }

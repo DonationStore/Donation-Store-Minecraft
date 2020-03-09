@@ -1,7 +1,7 @@
 package net.donationstore.commands;
 
-import net.donationstore.dto.GatewayResponse;
-import net.donationstore.dto.InformationDTO;
+import net.donationstore.models.response.GatewayResponse;
+import net.donationstore.models.response.InformationResponse;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -33,8 +33,8 @@ public class ConnectCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("information", HttpMethod.GET),
-                InformationDTO.class);
+                buildDefaultRequest("information", HttpMethod.GET, null),
+                InformationResponse.class);
 
         // Do stuff with the body. For the most part it's all logs.
 

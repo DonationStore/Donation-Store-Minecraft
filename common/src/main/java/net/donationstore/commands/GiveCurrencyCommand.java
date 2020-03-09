@@ -1,8 +1,9 @@
 package net.donationstore.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.donationstore.dto.GatewayResponse;
-import net.donationstore.dto.GiveCurrencyDTO;
+import net.donationstore.models.request.GiveCurrencyRequest;
+import net.donationstore.models.response.GatewayResponse;
+import net.donationstore.models.response.GiveCurrencyResponse;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
@@ -11,14 +12,7 @@ import java.util.ArrayList;
 
 public class GiveCurrencyCommand extends AbstractApiCommand {
 
-    @JsonProperty("amount")
-    private String amount;
-
-    @JsonProperty("uuid")
-    private String uuid;
-
-    @JsonProperty("currency-code")
-    private String currencyCode;
+    private GiveCurrencyRequest giveCurrencyRequest;
 
     @Override
     public String getSupportedCommand() {
@@ -36,9 +30,10 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setUUID(args[3]);
-        setCurrencyCode(args[4]);
-        setAmount(args[5]);
+        giveCurrencyRequest = new GiveCurrencyRequest();
+        giveCurrencyRequest.setUuid(args[3])
+                .setCurrencyCode(args[4])
+                .setAmount(args[5]);
 
         return this;
     }
@@ -47,8 +42,8 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("currency/give", HttpMethod.POST),
-                GiveCurrencyDTO.class);
+                buildDefaultRequest("currency/give", HttpMethod.POST, giveCurrencyRequest),
+                GiveCurrencyResponse.class);
 
         // Do stuff with the body
 
@@ -63,32 +58,5 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
     @Override
     public CommandType commandType() {
         return CommandType.PLAYER;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public GiveCurrencyCommand setAmount(String amount) {
-        this.amount = amount;
-        return this;
-    }
-
-    public String getUUID() {
-        return uuid;
-    }
-
-    public GiveCurrencyCommand setUUID(String uuid) {
-        this.uuid = uuid;
-        return this;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public GiveCurrencyCommand setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-        return this;
     }
 }

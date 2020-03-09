@@ -1,10 +1,10 @@
-package net.donationstore.dto;
+package net.donationstore.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
-public class CurrencyCodeDTO {
+public class CurrencyCodeResponse {
 
     @JsonProperty("code")
     public String code;

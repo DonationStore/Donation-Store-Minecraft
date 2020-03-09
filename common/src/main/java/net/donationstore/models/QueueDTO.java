@@ -1,4 +1,4 @@
-package net.donationstore.dto;
+package net.donationstore.models;
 
 import java.util.ArrayList;
 
