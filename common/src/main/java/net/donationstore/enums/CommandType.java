@@ -1,4 +1,4 @@
-package net.donationstore.commands;
+package net.donationstore.enums;
 
 public enum CommandType {
     CONSOLE,

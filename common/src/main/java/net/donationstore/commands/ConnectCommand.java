@@ -2,6 +2,8 @@ package net.donationstore.commands;
 
 import net.donationstore.dto.GatewayResponse;
 import net.donationstore.dto.InformationDTO;
+import net.donationstore.enums.CommandType;
+import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
 
 import java.util.ArrayList;
@@ -24,15 +26,15 @@ public class ConnectCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setWebstoreAPIResponseDTO(InformationDTO.class);
-
         return this;
     }
 
     @Override
     public ArrayList<String> runCommand() throws Exception {
 
-        GatewayResponse gatewayResponse = getWebstoreHTTPClient().get(this, "information");
+        GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
+                buildDefaultRequest("information", HttpMethod.GET),
+                InformationDTO.class);
 
         // Do stuff with the body. For the most part it's all logs.
 

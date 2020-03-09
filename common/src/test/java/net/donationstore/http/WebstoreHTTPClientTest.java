@@ -3,7 +3,8 @@ package net.donationstore.http;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.donationstore.commands.*;
 import net.donationstore.dto.*;
-import net.donationstore.exception.WebstoreAPIException;
+import net.donationstore.enums.HttpMethod;
+import net.donationstore.exception.ClientException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,15 +15,17 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 public class WebstoreHTTPClientTest {
 
@@ -65,22 +68,6 @@ public class WebstoreHTTPClientTest {
     }
 
     @Test
-    public void generateExceptionTest() {
-
-    }
-
-    @Test
-    public void getAPIUrlTest() throws Exception {
-        // when
-        URI uri = webstoreHTTPClient.getAPIUrl("information");
-
-        // then
-        assertEquals(uri.getAuthority(), "example.com");
-        assertEquals(uri.getHost(), "example.com");
-        assertEquals(uri.getPath(), "/information");
-    }
-
-    @Test
     public void connectCommandTest() throws Exception {
         // given
         doReturn("{\"webstore\": {\"currency\": \"EUR\", \"id\": 1, \"name\": \"Example Store\"}, \"server\": {\"ip\": \"127.0.0.1\", \"id\": 1, \"name\": \"Hello World\"}}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
@@ -88,7 +75,7 @@ public class WebstoreHTTPClientTest {
         connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.get(connect, "information");
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationDTO.class);
         InformationDTO informationDTO = (InformationDTO) gatewayResponse.getBody();
 
         // then
@@ -107,7 +94,7 @@ public class WebstoreHTTPClientTest {
         getCurrencyBalancesCommand.validate(new String[]{"balance", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.post(getCurrencyBalancesCommand, "currency/balances");
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/balances", HttpMethod.POST), CurrencyBalanceDTO.class);
         CurrencyBalanceDTO currencyBalanceDTO = (CurrencyBalanceDTO) gatewayResponse.getBody();
 
         // then
@@ -124,7 +111,7 @@ public class WebstoreHTTPClientTest {
         getCurrencyCodeCommand.validate(new String[]{"code", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.post(getCurrencyCodeCommand, "currency/code/generate");
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/code/generate", HttpMethod.POST), CurrencyCodeDTO.class);
         CurrencyCodeDTO currencyCodeDTO = (CurrencyCodeDTO) gatewayResponse.getBody();
 
         // then
@@ -140,7 +127,7 @@ public class WebstoreHTTPClientTest {
         giveCurrencyCommand.validate(new String[]{"give", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.post(giveCurrencyCommand, "currency/give");
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/give", HttpMethod.POST), GiveCurrencyDTO.class);
         GiveCurrencyDTO giveCurrencyDTO = (GiveCurrencyDTO) gatewayResponse.getBody();
 
         // then
@@ -148,26 +135,30 @@ public class WebstoreHTTPClientTest {
     }
 
     @Test
-    public void ioExceptionTest() throws Exception {
+    public void clientExceptionTest() throws Exception {
         // then
-        thrown.expect(WebstoreAPIException.class);
+        thrown.expect(ClientException.class);
         doThrow(IOException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         ConnectCommand connect = new ConnectCommand();
         connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
 
         // when
-        GatewayResponse gatewayResponse = webstoreHTTPClient.get(connect, "information");
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationDTO.class);
         InformationDTO informationDTO = (InformationDTO) gatewayResponse.getBody();
 
     }
 
-    @Test
-    public void interruptedExceptionTest() {
-
+    private GatewayRequest buildRequest(String resourceUrl, HttpMethod method) throws URISyntaxException {
+        GatewayRequest request = new GatewayRequest();
+        request.setUri("https://example.com" + resourceUrl);
+        request.setMethod(method);
+        request.setHeaders(getDefaultHeaders());
+        return request;
     }
 
-    @Test
-    public void uriSyntaxExceptionTest() {
-
+    public Map<String, String> getDefaultHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("secret-key", "secretKey");
+        return headers;
     }
 }

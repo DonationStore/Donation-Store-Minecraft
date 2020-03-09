@@ -2,8 +2,8 @@ package net.donationstore.commands;
 
 import net.donationstore.dto.CurrencyCodeDTO;
 import net.donationstore.dto.GatewayResponse;
-import net.donationstore.dto.InformationDTO;
-import net.donationstore.dto.WebstoreAPIResponseDTO;
+import net.donationstore.enums.CommandType;
+import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
 
 import java.util.ArrayList;
@@ -28,8 +28,6 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setWebstoreAPIResponseDTO(CurrencyCodeDTO.class);
-
         setUUID(args[3]);
         return this;
     }
@@ -37,7 +35,9 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
     @Override
     public ArrayList<String> runCommand() throws Exception {
 
-        GatewayResponse gatewayResponse = getWebstoreHTTPClient().post(this, "currency/code/generate");
+        GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
+                buildDefaultRequest("currency/code/generate", HttpMethod.POST),
+                CurrencyCodeDTO.class);
 
         // Do stuff with the body
         return getLogs();

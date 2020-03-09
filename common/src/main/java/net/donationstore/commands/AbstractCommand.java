@@ -1,6 +1,7 @@
 package net.donationstore.commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.donationstore.enums.CommandType;
 
 import java.util.ArrayList;
 

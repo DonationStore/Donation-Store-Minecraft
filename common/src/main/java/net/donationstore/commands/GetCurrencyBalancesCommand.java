@@ -1,11 +1,10 @@
 package net.donationstore.commands;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.donationstore.dto.CurrencyBalanceDTO;
 import net.donationstore.dto.GatewayResponse;
-import net.donationstore.dto.InformationDTO;
-import net.donationstore.dto.WebstoreAPIResponseDTO;
+import net.donationstore.enums.CommandType;
+import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.InvalidCommandUseException;
 
 import java.util.ArrayList;
@@ -32,8 +31,6 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
-        setWebstoreAPIResponseDTO(CurrencyBalanceDTO.class);
-
         setUUID(args[3]);
         return this;
     }
@@ -41,8 +38,9 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
     @Override
     public ArrayList<String> runCommand() throws Exception {
 
-        GatewayResponse gatewayResponse = getWebstoreHTTPClient().post(this, "currency/balances");
-
+        GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
+                buildDefaultRequest("currency/balances", HttpMethod.POST),
+                CurrencyBalanceDTO.class);
         // Do stuff with the body
         return getLogs();
     }

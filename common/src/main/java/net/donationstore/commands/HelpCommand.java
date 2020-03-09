@@ -1,5 +1,7 @@
 package net.donationstore.commands;
 
+import net.donationstore.enums.CommandType;
+
 import java.util.ArrayList;
 
 public class HelpCommand extends AbstractCommand {
