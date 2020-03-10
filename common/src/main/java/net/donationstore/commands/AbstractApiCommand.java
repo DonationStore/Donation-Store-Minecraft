@@ -73,7 +73,7 @@ public abstract class AbstractApiCommand<T> extends AbstractCommand {
 
     public GatewayRequest buildDefaultRequest(String resourceUrl, HttpMethod method, Object body) throws URISyntaxException {
         GatewayRequest request = new GatewayRequest();
-        request.setUri(getWebstoreApiLocation() + resourceUrl);
+        request.setUri(String.format("%s/%s", getWebstoreApiLocation(), resourceUrl));
         request.setMethod(method);
         request.setHeaders(getDefaultHeaders());
         return request;

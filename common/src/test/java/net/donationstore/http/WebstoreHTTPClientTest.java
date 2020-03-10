@@ -73,7 +73,7 @@ public class WebstoreHTTPClientTest {
         // given
         doReturn("{\"webstore\": {\"currency\": \"EUR\", \"id\": 1, \"name\": \"Example Store\"}, \"server\": {\"ip\": \"127.0.0.1\", \"id\": 1, \"name\": \"Hello World\"}}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         ConnectCommand connect = new ConnectCommand();
-        connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
+        connect.validate(new String[]{"secretKey", "https://example.com"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationResponse.class);
@@ -92,7 +92,7 @@ public class WebstoreHTTPClientTest {
         // given
         doReturn("{\"username\": \"MCxJB\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\", \"balances\": {\"EUR\": \"1.00\"}}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         GetCurrencyBalancesCommand getCurrencyBalancesCommand = new GetCurrencyBalancesCommand();
-        getCurrencyBalancesCommand.validate(new String[]{"balance", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
+        getCurrencyBalancesCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/balances", HttpMethod.POST), CurrencyBalanceResponse.class);
@@ -109,7 +109,7 @@ public class WebstoreHTTPClientTest {
         // given
         doReturn("{\"code\": \"D3CRWAZ47A\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         GetCurrencyCodeCommand getCurrencyCodeCommand = new GetCurrencyCodeCommand();
-        getCurrencyCodeCommand.validate(new String[]{"code", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
+        getCurrencyCodeCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/code/generate", HttpMethod.POST), CurrencyCodeResponse.class);
@@ -125,7 +125,7 @@ public class WebstoreHTTPClientTest {
         // given
         doReturn("{\"message\": \"10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         GiveCurrencyCommand giveCurrencyCommand = new GiveCurrencyCommand();
-        giveCurrencyCommand.validate(new String[]{"give", "secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
+        giveCurrencyCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/give", HttpMethod.POST), GiveCurrencyResponse.class);
@@ -141,7 +141,7 @@ public class WebstoreHTTPClientTest {
         thrown.expect(ClientException.class);
         doThrow(IOException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         ConnectCommand connect = new ConnectCommand();
-        connect.validate(new String[]{"connect", "secretKey", "https://example.com"});
+        connect.validate(new String[]{"secretKey", "https://example.com"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationResponse.class);

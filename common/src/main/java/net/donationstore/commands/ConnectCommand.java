@@ -17,7 +17,7 @@ public class ConnectCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 2) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
             throw new InvalidCommandUseException(getLogs());

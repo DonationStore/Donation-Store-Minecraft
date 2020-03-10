@@ -23,7 +23,7 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 4) {
+        if (args.length != 3) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
             throw new InvalidCommandUseException(getLogs());
@@ -33,7 +33,7 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
                 .setWebstoreAPILocation(args[1]);
 
         currencyBalanceRequest = new CurrencyBalanceRequest();
-        currencyBalanceRequest.setUuid(args[3]);
+        currencyBalanceRequest.setUuid(args[2]);
         return this;
     }
 

@@ -20,7 +20,7 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 4) {
+        if (args.length != 3) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
             throw new InvalidCommandUseException(getLogs());
@@ -30,7 +30,7 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
                 .setWebstoreAPILocation(args[1]);
 
         currencyCodeRequest = new CurrencyCodeRequest();
-        currencyCodeRequest.setUuid(args[3]);
+        currencyCodeRequest.setUuid(args[2]);
         return this;
     }
 

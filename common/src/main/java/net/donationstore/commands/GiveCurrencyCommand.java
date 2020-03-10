@@ -21,7 +21,7 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 6) {
+        if (args.length != 5) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
             throw new InvalidCommandUseException(getLogs());
@@ -31,9 +31,9 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
                 .setWebstoreAPILocation(args[1]);
 
         giveCurrencyRequest = new GiveCurrencyRequest();
-        giveCurrencyRequest.setUuid(args[3])
-                .setCurrencyCode(args[4])
-                .setAmount(args[5]);
+        giveCurrencyRequest.setUuid(args[2])
+                .setCurrencyCode(args[3])
+                .setAmount(args[4]);
 
         return this;
     }
