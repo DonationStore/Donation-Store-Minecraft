@@ -136,17 +136,36 @@ public class WebstoreHTTPClientTest {
     }
 
     @Test
-    public void clientExceptionTest() throws Exception {
-        // then
-        thrown.expect(ClientException.class);
+    public void ioExceptionToClientExceptionTest() throws Exception {
+        // given
         doThrow(IOException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
         ConnectCommand connect = new ConnectCommand();
         connect.validate(new String[]{"secretKey", "https://example.com"});
+
+        // then
+        thrown.expect(ClientException.class);
+        thrown.expectMessage("Exception when contacting the webstore API");
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationResponse.class);
         InformationResponse informationResponse = (InformationResponse) gatewayResponse.getBody();
 
+    }
+
+    @Test
+    public void interruptedExceptionToClientExceptionTest() throws Exception {
+        // given
+        doThrow(InterruptedException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        ConnectCommand connect = new ConnectCommand();
+        connect.validate(new String[]{"secretKey", "https://example.com"});
+
+        // then
+        thrown.expect(ClientException.class);
+        thrown.expectMessage("Exception when contacting the webstore API");
+
+        // when
+        GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("information", HttpMethod.GET), InformationResponse.class);
+        InformationResponse information = (InformationResponse) gatewayResponse.getBody();
     }
 
     private GatewayRequest buildRequest(String resourceUrl, HttpMethod method) throws URISyntaxException {
