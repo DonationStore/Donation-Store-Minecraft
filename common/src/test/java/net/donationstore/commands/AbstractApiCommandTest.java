@@ -71,7 +71,7 @@ public class AbstractApiCommandTest<T> {
         // given
         testCommand.getWebstoreHTTPClient().setSecretKey("example");
         Map<String, String> headers = new HashMap<>();
-        headers.put("secret-key", "example");
+        headers.put("Secret-Key", "example");
 
         // then
         assertEquals(headers, testCommand.getWebstoreHTTPClient().getDefaultHeaders());
@@ -84,7 +84,7 @@ public class AbstractApiCommandTest<T> {
         testCommand.getWebstoreHTTPClient().setWebstoreAPILocation("https://example.com");
         testCommand.getWebstoreHTTPClient().setSecretKey("example");
         Map<String, String> headers = new HashMap<>();
-        headers.put("secret-key", "example");
+        headers.put("Secret-Key", "example");
         CurrencyCodeRequest currencyCodeRequest = new CurrencyCodeRequest();
 
         // when
