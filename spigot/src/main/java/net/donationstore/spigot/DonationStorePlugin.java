@@ -2,8 +2,8 @@ package net.donationstore.spigot;
 
 import net.donationstore.commands.CommandFactory;
 import net.donationstore.commands.CommandManager;
-import net.donationstore.models.CommandExectionPayloadDTO;
-import net.donationstore.models.QueueDTO;
+import net.donationstore.models.response.PaymentsResponse;
+import net.donationstore.models.response.QueueResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -33,7 +33,7 @@ public class DonationStorePlugin extends JavaPlugin {
         Log.toConsole("For Support/Help, Please Visit: https://donationstore.net/support");
         config = plugin.getConfig();
 
-        commandManager = new CommandManager();
+        commandManager = new CommandManager("secretKey", "webstoreAPILocation");
 
         Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
             public void run() {
@@ -42,16 +42,9 @@ public class DonationStorePlugin extends JavaPlugin {
                     // Get the command queue, execute the commands that come back.
                     // Only active commands will come back.
                     // Keep a list of the executed commands and then POST them back using the command managers update method.
-                    QueueDTO queueDTO = commandManager.getCommands("secretKey", "webstoreAPILocation");
+                    QueueResponse queueResponse = commandManager.getCommands();
 
-                    // Execute commands
-                    for(CommandExectionPayloadDTO commandPayload: queueDTO.commandExectionPayloadDTO) {
-                        for(Map.Entry<String, String> command: commandPayload.commands.entrySet()) {
-                            if (!Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.getValue())) {
-                                executedCommands.add(command.getKey());
-                            }
-                        }
-                    }
+
                     // Make request back with executed commands
                     /*if (commandManager.updateCommandsToExecuted("secretKey", "webstoreAPILocation", executedCommands)) {
                         // Do something

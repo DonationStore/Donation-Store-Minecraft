@@ -41,7 +41,7 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("currency/balances", HttpMethod.POST, currencyBalanceRequest),
+                getWebstoreHTTPClient().buildDefaultRequest("currency/balances", HttpMethod.POST, currencyBalanceRequest),
                 CurrencyBalanceResponse.class);
 
         CurrencyBalanceResponse currencyBalanceResponse = (CurrencyBalanceResponse) gatewayResponse.getBody();

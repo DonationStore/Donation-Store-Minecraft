@@ -16,12 +16,6 @@ public abstract class AbstractApiCommand<T> extends AbstractCommand {
     @JsonIgnore
     private WebstoreHTTPClient webstoreHTTPClient;
 
-    @JsonIgnore
-    private String webstoreApiLocation;
-
-    @JsonIgnore
-    private String secretKey;
-
     public AbstractApiCommand() {
         super();
         webstoreHTTPClient = new WebstoreHTTPClient();
@@ -41,41 +35,11 @@ public abstract class AbstractApiCommand<T> extends AbstractCommand {
         return "Invalid usage of command. Help Info: ";
     }
 
-    public String getWebstoreApiLocation() {
-        return webstoreApiLocation;
-    }
-
-    public void setWebstoreApiLocation(String webstoreApiLocation) {
-        this.webstoreApiLocation = webstoreApiLocation;
-    }
-
     public WebstoreHTTPClient getWebstoreHTTPClient() {
         return webstoreHTTPClient;
     }
 
     public void setWebstoreHTTPClient(WebstoreHTTPClient webstoreHTTPClient) {
         this.webstoreHTTPClient = webstoreHTTPClient;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public Map<String, String> getDefaultHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("secret-key", secretKey);
-        return headers;
-    }
-
-    public GatewayRequest buildDefaultRequest(String resourceUrl, HttpMethod method, Object body) throws URISyntaxException {
-        GatewayRequest request = new GatewayRequest();
-        request.setUri(String.format("%s/%s", getWebstoreApiLocation(), resourceUrl));
-        request.setMethod(method);
-        request.setHeaders(getDefaultHeaders());
-        return request;
     }
 }

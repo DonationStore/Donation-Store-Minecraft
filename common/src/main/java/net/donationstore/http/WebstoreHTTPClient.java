@@ -1,16 +1,19 @@
 package net.donationstore.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.donationstore.enums.HttpMethod;
 import net.donationstore.models.request.GatewayRequest;
 import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.exception.ClientException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static net.donationstore.enums.HttpMethod.POST;
@@ -89,5 +92,19 @@ public class WebstoreHTTPClient {
 
     public String sendHttpRequest(HttpClient client, HttpRequest request) throws IOException, InterruptedException {
         return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+    }
+
+    public Map<String, String> getDefaultHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Secret-Key", secretKey);
+        return headers;
+    }
+
+    public GatewayRequest buildDefaultRequest(String resourceUrl, HttpMethod method, Object body) throws URISyntaxException {
+        GatewayRequest request = new GatewayRequest();
+        request.setUri(String.format("%s/%s", webstoreAPILocation, resourceUrl));
+        request.setMethod(method);
+        request.setHeaders(getDefaultHeaders());
+        return request;
     }
 }

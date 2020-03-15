@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -66,6 +67,27 @@ public class WebstoreHTTPClientTest {
         // then
         assertEquals("secretKey", webstoreHTTPClient.getSecretKey());
         assertEquals("https://example.com", webstoreHTTPClient.getWebstoreAPILocation());
+    }
+
+    @Test
+    public void buildDefaultRequestTest() throws Exception {
+        // when
+        GatewayRequest gatewayRequest = webstoreHTTPClient.buildDefaultRequest("example", HttpMethod.GET, null);
+
+        // then
+        assertEquals(URI.create("https://example.com/example"), gatewayRequest.getUri());
+        assertEquals(HttpMethod.GET, gatewayRequest.getMethod());
+        assertEquals("secretKey", gatewayRequest.getHeaders().get("Secret-Key"));
+    }
+
+    @Test
+    public void getDefaultHeadersTest() {
+        // given
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Secret-Key", "secretKey");
+
+        // then
+        assertEquals(headers, webstoreHTTPClient.getDefaultHeaders());
     }
 
     @Test

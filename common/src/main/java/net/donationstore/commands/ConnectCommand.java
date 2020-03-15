@@ -33,7 +33,7 @@ public class ConnectCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("information", HttpMethod.GET, null),
+                getWebstoreHTTPClient().buildDefaultRequest("information", HttpMethod.GET, null),
                 InformationResponse.class);
 
         InformationResponse informationResponse = (InformationResponse) gatewayResponse.getBody();

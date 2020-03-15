@@ -38,7 +38,7 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("currency/code/generate", HttpMethod.POST, currencyCodeRequest),
+                getWebstoreHTTPClient().buildDefaultRequest("currency/code/generate", HttpMethod.POST, currencyCodeRequest),
                 CurrencyCodeResponse.class);
 
         CurrencyCodeResponse currencyCodeResponse = (CurrencyCodeResponse) gatewayResponse.getBody();

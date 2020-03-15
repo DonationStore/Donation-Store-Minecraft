@@ -42,7 +42,7 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
     public ArrayList<String> runCommand() throws Exception {
 
         GatewayResponse gatewayResponse = getWebstoreHTTPClient().sendRequest(
-                buildDefaultRequest("currency/give", HttpMethod.POST, giveCurrencyRequest),
+                getWebstoreHTTPClient().buildDefaultRequest("currency/give", HttpMethod.POST, giveCurrencyRequest),
                 GiveCurrencyResponse.class);
 
         GiveCurrencyResponse giveCurrencyResponse = (GiveCurrencyResponse) gatewayResponse.getBody();

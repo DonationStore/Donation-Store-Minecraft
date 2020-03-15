@@ -54,12 +54,12 @@ public class AbstractApiCommandTest<T> {
     @Test
     public void gettersSettersTest() {
         // given
-        testCommand.setSecretKey("example");
-        testCommand.setWebstoreApiLocation("https://example.com");
+        testCommand.getWebstoreHTTPClient().setSecretKey("example");
+        testCommand.getWebstoreHTTPClient().setWebstoreAPILocation("https://example.com");
 
         // then
-        assertEquals("example", testCommand.getSecretKey());
-        assertEquals("https://example.com", testCommand.getWebstoreApiLocation());
+        assertEquals("example", testCommand.getWebstoreHTTPClient().getSecretKey());
+        assertEquals("https://example.com", testCommand.getWebstoreHTTPClient().getWebstoreAPILocation());
         assertEquals("test", testCommand.getSupportedCommand());
         assertEquals(CommandType.PLAYER, testCommand.commandType());
         assertEquals("Example help info", testCommand.helpInfo());
@@ -69,26 +69,26 @@ public class AbstractApiCommandTest<T> {
     @Test
     public void defaultHeadersTest() {
         // given
-        testCommand.setSecretKey("example");
+        testCommand.getWebstoreHTTPClient().setSecretKey("example");
         Map<String, String> headers = new HashMap<>();
         headers.put("secret-key", "example");
 
         // then
-        assertEquals(headers, testCommand.getDefaultHeaders());
+        assertEquals(headers, testCommand.getWebstoreHTTPClient().getDefaultHeaders());
     }
 
     @Test
     public void buildDefaultRequestTest() throws Exception {
         // given
-        testCommand.setSecretKey("example");
-        testCommand.setWebstoreApiLocation("https://example.com");
-        testCommand.setSecretKey("example");
+        testCommand.getWebstoreHTTPClient().setSecretKey("example");
+        testCommand.getWebstoreHTTPClient().setWebstoreAPILocation("https://example.com");
+        testCommand.getWebstoreHTTPClient().setSecretKey("example");
         Map<String, String> headers = new HashMap<>();
         headers.put("secret-key", "example");
         CurrencyCodeRequest currencyCodeRequest = new CurrencyCodeRequest();
 
         // when
-        GatewayRequest request = testCommand.buildDefaultRequest("example", HttpMethod.POST, currencyCodeRequest);
+        GatewayRequest request = testCommand.getWebstoreHTTPClient().buildDefaultRequest("example", HttpMethod.POST, currencyCodeRequest);
 
         // then
         assertEquals(URI.create("https://example.com/example"), request.getUri());
