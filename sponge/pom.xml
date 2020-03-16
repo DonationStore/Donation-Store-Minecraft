@@ -9,7 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sponge</artifactId>
+    <artifactId>donation-store-sponge</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spongepowered</groupId>
+            <artifactId>spongeapi</artifactId>
+        </dependency>
+    </dependencies>
 
 
 </project>

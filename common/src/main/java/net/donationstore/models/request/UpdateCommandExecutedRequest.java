@@ -8,6 +8,10 @@ public class UpdateCommandExecutedRequest {
     @JsonProperty("commands")
     private ArrayList<Integer> commands;
 
+    public UpdateCommandExecutedRequest() {
+        commands = new ArrayList<>();
+    }
+
     public ArrayList<Integer> getCommands() {
         return commands;
     }

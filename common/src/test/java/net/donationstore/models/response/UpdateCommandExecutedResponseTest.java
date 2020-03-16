@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UpdateCommandExecutedResponseTest {
 
@@ -38,6 +37,6 @@ public class UpdateCommandExecutedResponseTest {
         updateCommandExecutedResponse.setMessage("Example Message");
 
         // then
-        assertTrue(updateCommandExecutedResponse.getCommandsNotFound().isEmpty());
+        assertFalse(updateCommandExecutedResponse.getCommandsNotFound().isPresent());
     }
 }

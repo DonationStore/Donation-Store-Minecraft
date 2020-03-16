@@ -51,7 +51,7 @@ public class GetCurrencyCodeCommandTest {
     public void gettersSettersTest() {
         // then
         assertEquals("code", getCurrencyCodeCommand.getSupportedCommand());
-        assertEquals("This command is used to generate a Virtual Currency Claim code used on a webstore to pay with Virtual Currencies.", getCurrencyCodeCommand.helpInfo());
+        assertEquals("This command is used to generate a Virtual Currency Claim code used on a webstore to pay with Virtual Currencies.\n Usage: /ds code", getCurrencyCodeCommand.helpInfo());
         assertEquals(CommandType.PLAYER, getCurrencyCodeCommand.commandType());
     }
 

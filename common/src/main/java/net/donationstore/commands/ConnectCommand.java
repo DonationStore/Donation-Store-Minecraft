@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 public class ConnectCommand extends AbstractApiCommand {
 
+    public ConnectCommand() {
+        setPermission("donationstore.admin");
+    }
+
     @Override
     public String getSupportedCommand() {
         return "connect";
@@ -20,7 +24,7 @@ public class ConnectCommand extends AbstractApiCommand {
         if (args.length != 2) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
-            throw new InvalidCommandUseException(getLogs());
+            throw new InvalidCommandUseException(returnAndClearLogs());
         }
 
         getWebstoreHTTPClient().setSecretKey(args[0])
@@ -41,13 +45,13 @@ public class ConnectCommand extends AbstractApiCommand {
         addLog(String.format("Connected to webstore %s", informationResponse.getWebstore().get("name")));
         addLog("Donation Store will now start retrieving commands occasionally");
 
-        return getLogs();
+        return returnAndClearLogs();
     }
 
     @Override
     public String helpInfo() {
         return "This command is used to connect the Donation Store plugin to your webstore.\n" +
-                " Usage: /ds connect <application_api_location> <secret_key>";
+                " Usage: /ds connect <secret_key> <webstore_api_location>";
     }
 
     @Override

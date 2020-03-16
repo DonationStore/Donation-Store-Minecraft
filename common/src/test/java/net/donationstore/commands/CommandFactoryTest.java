@@ -49,7 +49,7 @@ public class CommandFactoryTest {
     public void whenCommandExistsWithIncorrectArgumentsTest() {
         // then
         thrown.expect(InvalidCommandUseException.class);
-        thrown.expectMessage("[Invalid usage of command. Help Info: , This command is used to view your Virtual Currency balances.]");
+        thrown.expectMessage("Invalid usage of command. Help Info: This command is used to view your Virtual Currency balances.\n Usage: /ds balance");
 
         // when
         Command command = commandFactory.getCommand(new String[]{"balance", "webstoreAPILocation", "secretKey"});
@@ -59,7 +59,7 @@ public class CommandFactoryTest {
     public void whenCommandDoesNotExistTest() {
         // then
         thrown.expect(InvalidCommandUseException.class);
-        thrown.expectMessage("[That command doesn't exist.]");
+        thrown.expectMessage("That command doesn't exist.");
 
         // when
         Command command = commandFactory.getCommand(new String[]{"incorrectCommand", "webstoreAPILocation", "secretKey"});

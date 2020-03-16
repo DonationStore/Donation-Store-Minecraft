@@ -5,12 +5,12 @@ import net.donationstore.models.Meta;
 import net.donationstore.models.Variable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentsResponse {
-    // ID -> Command
     public Meta meta;
-    public ArrayList<Command> commands;
-    public ArrayList<Variable> variables;
+    public List<Command> commands;
+    public List<Variable> variables;
 
     public PaymentsResponse() {
         commands = new ArrayList<>();

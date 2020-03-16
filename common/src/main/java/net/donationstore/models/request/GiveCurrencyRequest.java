@@ -6,10 +6,10 @@ public class GiveCurrencyRequest {
     @JsonProperty("amount")
     private String amount;
 
-    @JsonProperty("uuid")
-    private String uuid;
+    @JsonProperty("username")
+    private String username;
 
-    @JsonProperty("currency-code")
+    @JsonProperty("currency_code")
     private String currencyCode;
 
     public String getAmount() {
@@ -21,12 +21,12 @@ public class GiveCurrencyRequest {
         return this;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getUsername() {
+        return username;
     }
 
-    public GiveCurrencyRequest setUuid(String uuid) {
-        this.uuid = uuid;
+    public GiveCurrencyRequest setUsername(String username) {
+        this.username = username;
         return this;
     }
 

@@ -12,6 +12,12 @@ public class WebstoreAPIException extends Exception {
 
     @Override
     public String getMessage() {
-        return this.logs.toString();
+        StringBuilder log = new StringBuilder();
+
+        for (String singleLog: logs) {
+            log.append(singleLog);
+        }
+
+        return log.toString();
     }
 }

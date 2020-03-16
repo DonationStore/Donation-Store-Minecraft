@@ -18,6 +18,6 @@ public class InvalidCommandUseExceptionTest {
         invalidCommandUseException = new InvalidCommandUseException(logs);
 
         // then
-        assertEquals("[Example exception message]", invalidCommandUseException.getMessage());
+        assertEquals("Example exception message", invalidCommandUseException.getMessage());
     }
 }

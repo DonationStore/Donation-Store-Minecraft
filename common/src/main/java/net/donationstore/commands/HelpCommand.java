@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 public class HelpCommand extends AbstractCommand {
 
+    public HelpCommand() {
+        setPermission("donationstore.help");
+    }
+
     @Override
     public String getSupportedCommand() {
         return "help";
@@ -18,12 +22,13 @@ public class HelpCommand extends AbstractCommand {
 
     @Override
     public ArrayList<String> runCommand() {
+        getLogs().add("Help: ");
         getLogs().add("/ds currency-balances : Gets your virtual currency balances");
         getLogs().add("/ds currency-code : Generates a virtual currency code");
         getLogs().add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
         getLogs().add("/ds help : Runs the help command");
 
-        return getLogs();
+        return returnAndClearLogs();
     }
 
     @Override

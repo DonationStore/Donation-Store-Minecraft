@@ -18,6 +18,6 @@ public class CommandNotFoundExceptionTest {
         commandNotFoundException = new CommandNotFoundException(logs);
 
         // then
-        assertEquals("[Example exception message]", commandNotFoundException.getMessage());
+        assertEquals("Example exception message", commandNotFoundException.getMessage());
     }
 }

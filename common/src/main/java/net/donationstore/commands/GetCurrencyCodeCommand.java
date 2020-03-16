@@ -10,7 +10,11 @@ import net.donationstore.exception.InvalidCommandUseException;
 import java.util.ArrayList;
 
 public class GetCurrencyCodeCommand extends AbstractApiCommand {
-    
+
+    public GetCurrencyCodeCommand() {
+        setPermission("donationstore.code");
+    }
+
     private CurrencyCodeRequest currencyCodeRequest;
 
     @Override
@@ -23,7 +27,7 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
         if (args.length != 3) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
-            throw new InvalidCommandUseException(getLogs());
+            throw new InvalidCommandUseException(returnAndClearLogs());
         }
 
         getWebstoreHTTPClient().setSecretKey(args[0])
@@ -45,12 +49,13 @@ public class GetCurrencyCodeCommand extends AbstractApiCommand {
 
         addLog(String.format("Currency Code: %s", currencyCodeResponse.getCode()));
 
-        return getLogs();
+        return returnAndClearLogs();
     }
 
     @Override
     public String helpInfo() {
-        return "This command is used to generate a Virtual Currency Claim code used on a webstore to pay with Virtual Currencies.";
+        return "This command is used to generate a Virtual Currency Claim code used on a webstore to pay with Virtual Currencies.\n" +
+                " Usage: /ds code";
     }
 
     @Override

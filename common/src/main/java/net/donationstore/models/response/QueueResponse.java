@@ -1,7 +1,6 @@
 package net.donationstore.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.donationstore.models.response.PaymentsResponse;
 
 import java.util.ArrayList;
 

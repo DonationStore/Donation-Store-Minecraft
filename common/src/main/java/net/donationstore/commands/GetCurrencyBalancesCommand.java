@@ -1,9 +1,7 @@
 package net.donationstore.commands;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import net.donationstore.models.request.CurrencyBalanceRequest;
 import net.donationstore.models.response.CurrencyBalanceResponse;
-import net.donationstore.models.response.CurrencyCodeResponse;
 import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.enums.CommandType;
 import net.donationstore.enums.HttpMethod;
@@ -13,6 +11,10 @@ import java.util.ArrayList;
 
 
 public class GetCurrencyBalancesCommand extends AbstractApiCommand {
+
+    public GetCurrencyBalancesCommand() {
+        setPermission("donationstore.balance");
+    }
 
     private CurrencyBalanceRequest currencyBalanceRequest;
 
@@ -26,7 +28,7 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
         if (args.length != 3) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
-            throw new InvalidCommandUseException(getLogs());
+            throw new InvalidCommandUseException(returnAndClearLogs());
         }
 
         getWebstoreHTTPClient().setSecretKey(args[0])
@@ -46,16 +48,17 @@ public class GetCurrencyBalancesCommand extends AbstractApiCommand {
 
         CurrencyBalanceResponse currencyBalanceResponse = (CurrencyBalanceResponse) gatewayResponse.getBody();
 
-        for(String key: currencyBalanceResponse.getBalances().keySet()) {
+        for (String key : currencyBalanceResponse.getBalances().keySet()) {
             addLog(String.format("%s: %s", key, currencyBalanceResponse.getBalances().get(key)));
         }
 
-        return getLogs();
+        return returnAndClearLogs();
     }
 
     @Override
     public String helpInfo() {
-        return "This command is used to view your Virtual Currency balances.";
+        return "This command is used to view your Virtual Currency balances.\n" +
+                " Usage: /ds balance";
     }
 
     @Override

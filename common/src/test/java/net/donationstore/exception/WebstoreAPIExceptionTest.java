@@ -18,6 +18,6 @@ public class WebstoreAPIExceptionTest {
         webstoreAPIException = new WebstoreAPIException(logs);
 
         // then
-        assertEquals("[Example exception message]", webstoreAPIException.getMessage());
+        assertEquals("Example exception message", webstoreAPIException.getMessage());
     }
 }

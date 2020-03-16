@@ -52,7 +52,7 @@ public class ConnectCommandTest {
         // then
         assertEquals("connect", connectCommand.getSupportedCommand());
         assertEquals("This command is used to connect the Donation Store plugin to your webstore.\n" +
-                " Usage: /ds connect <application_api_location> <secret_key>", connectCommand.helpInfo());
+                " Usage: /ds connect <secret_key> <webstore_api_location>", connectCommand.helpInfo());
         assertEquals(CommandType.CONSOLE, connectCommand.commandType());
     }
 

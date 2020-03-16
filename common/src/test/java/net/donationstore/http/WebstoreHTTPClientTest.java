@@ -6,6 +6,8 @@ import net.donationstore.enums.HttpMethod;
 import net.donationstore.exception.ClientException;
 import net.donationstore.models.request.GatewayRequest;
 import net.donationstore.models.response.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,8 +20,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -42,15 +42,13 @@ public class WebstoreHTTPClientTest {
 
     private CommandFactory commandFactory;
 
-    private HttpClient httpClient;
+    private OkHttpClient httpClient;
     private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
 
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+        httpClient = new OkHttpClient();
 
         objectMapper = new ObjectMapper();
 
@@ -93,7 +91,7 @@ public class WebstoreHTTPClientTest {
     @Test
     public void connectCommandTest() throws Exception {
         // given
-        doReturn("{\"webstore\": {\"currency\": \"EUR\", \"id\": 1, \"name\": \"Example Store\"}, \"server\": {\"ip\": \"127.0.0.1\", \"id\": 1, \"name\": \"Hello World\"}}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        doReturn("{\"webstore\": {\"currency\": \"EUR\", \"id\": 1, \"name\": \"Example Store\"}, \"server\": {\"ip\": \"127.0.0.1\", \"id\": 1, \"name\": \"Hello World\"}}").when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         ConnectCommand connect = new ConnectCommand();
         connect.validate(new String[]{"secretKey", "https://example.com"});
 
@@ -112,7 +110,7 @@ public class WebstoreHTTPClientTest {
     @Test
     public void getCurrencyBalancesTest() throws Exception {
         // given
-        doReturn("{\"username\": \"MCxJB\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\", \"balances\": {\"EUR\": \"1.00\"}}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        doReturn("{\"username\": \"MCxJB\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\", \"balances\": {\"EUR\": \"1.00\"}}").when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         GetCurrencyBalancesCommand getCurrencyBalancesCommand = new GetCurrencyBalancesCommand();
         getCurrencyBalancesCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
@@ -129,7 +127,7 @@ public class WebstoreHTTPClientTest {
     @Test
     public void getCurrencyCodeTest() throws Exception {
         // given
-        doReturn("{\"code\": \"D3CRWAZ47A\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        doReturn("{\"code\": \"D3CRWAZ47A\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         GetCurrencyCodeCommand getCurrencyCodeCommand = new GetCurrencyCodeCommand();
         getCurrencyCodeCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
@@ -145,7 +143,7 @@ public class WebstoreHTTPClientTest {
     @Test
     public void giveCurrencyCodeTest() throws Exception {
         // given
-        doReturn("{\"message\": \"10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        doReturn("{\"message\": \"10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         GiveCurrencyCommand giveCurrencyCommand = new GiveCurrencyCommand();
         giveCurrencyCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
 
@@ -160,7 +158,7 @@ public class WebstoreHTTPClientTest {
     @Test
     public void ioExceptionToClientExceptionTest() throws Exception {
         // given
-        doThrow(IOException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        doThrow(IOException.class).when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         ConnectCommand connect = new ConnectCommand();
         connect.validate(new String[]{"secretKey", "https://example.com"});
 
@@ -177,7 +175,7 @@ public class WebstoreHTTPClientTest {
     @Test
     public void interruptedExceptionToClientExceptionTest() throws Exception {
         // given
-        doThrow(InterruptedException.class).when(webstoreHTTPClient).sendHttpRequest(any(HttpClient.class), any(HttpRequest.class));
+        doThrow(InterruptedException.class).when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         ConnectCommand connect = new ConnectCommand();
         connect.validate(new String[]{"secretKey", "https://example.com"});
 

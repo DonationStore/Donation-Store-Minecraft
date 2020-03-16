@@ -13,12 +13,12 @@ public class GiveCurrencyRequestTest {
         // given
         giveCurrencyRequest = new GiveCurrencyRequest();
         giveCurrencyRequest.setAmount("100");
-        giveCurrencyRequest.setUuid("28408e37-5b7d-4c6d-b723-b7a845418dcd");
+        giveCurrencyRequest.setUsername("MCxJB");
         giveCurrencyRequest.setCurrencyCode("EUR");
 
         // then
         assertEquals("100", giveCurrencyRequest.getAmount());
-        assertEquals("28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyRequest.getUuid());
+        assertEquals("MCxJB", giveCurrencyRequest.getUsername());
         assertEquals("EUR", giveCurrencyRequest.getCurrencyCode());
     }
 }

@@ -1,8 +1,9 @@
 name: Donation-Store-Spigot
+author: Donation Store
 version: 2.0
 main: net.donationstore.spigot.DonationStorePlugin
 website: https://donationstore.net
 commands:
-  donationstore:
+  ds:
     description: Main command for the Donation Store plugin.
-    usage: /donationstore
+    usage: /ds

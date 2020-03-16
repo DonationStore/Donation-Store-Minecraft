@@ -1,16 +1,15 @@
-package net.donationstore.spigot;
+package net.donationstore.bungeecord;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Log {
 
     public static void send(CommandSender sender, String log) {
-        if (sender instanceof Player) {
+        if (sender instanceof ProxiedPlayer) {
             sender.sendMessage(String.format("%s[Donation Store]%s: %s", ChatColor.GREEN, ChatColor.WHITE, log));
         } else {
             System.out.println(String.format("[Donation Store]: %s", log));

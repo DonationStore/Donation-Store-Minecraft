@@ -19,8 +19,6 @@ import org.mockito.junit.MockitoRule;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Optional;
 

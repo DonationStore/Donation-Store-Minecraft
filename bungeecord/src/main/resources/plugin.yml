@@ -1,4 +1,9 @@
-name: Donation-Store-Bungeecord
+name: Donation-Store-BungeeCord
+author: Donation Store
+version: 2.0
 main: net.donationstore.bungeecord.DonationStorePlugin
-version: '2.0'
-author: Donation-Store
+website: https://donationstore.net
+commands:
+  ds:
+    description: Main command for the Donation Store plugin.
+    usage: /ds

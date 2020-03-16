@@ -1,15 +1,10 @@
 package net.donationstore.commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.donationstore.models.request.GatewayRequest;
 import net.donationstore.enums.CommandType;
-import net.donationstore.enums.HttpMethod;
 import net.donationstore.http.WebstoreHTTPClient;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AbstractApiCommand<T> extends AbstractCommand {
 

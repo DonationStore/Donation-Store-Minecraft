@@ -15,4 +15,6 @@ public interface Command {
     public String helpInfo();
 
     public CommandType commandType();
+
+    public String getPermission();
 }

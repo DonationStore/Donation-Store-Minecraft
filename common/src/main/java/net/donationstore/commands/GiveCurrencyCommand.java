@@ -1,6 +1,5 @@
 package net.donationstore.commands;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import net.donationstore.models.request.GiveCurrencyRequest;
 import net.donationstore.models.response.GatewayResponse;
 import net.donationstore.models.response.GiveCurrencyResponse;
@@ -12,6 +11,10 @@ import java.util.ArrayList;
 
 public class GiveCurrencyCommand extends AbstractApiCommand {
 
+    public GiveCurrencyCommand() {
+        setPermission("donationstore.currency");
+    }
+
     private GiveCurrencyRequest giveCurrencyRequest;
 
     @Override
@@ -21,17 +24,17 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
 
     @Override
     public Command validate(String[] args) {
-        if (args.length != 5) {
+        if (args.length != 6) {
             getLogs().add(getInvalidCommandMessage());
             getLogs().add(helpInfo());
-            throw new InvalidCommandUseException(getLogs());
+            throw new InvalidCommandUseException(returnAndClearLogs());
         }
 
         getWebstoreHTTPClient().setSecretKey(args[0])
                 .setWebstoreAPILocation(args[1]);
 
         giveCurrencyRequest = new GiveCurrencyRequest();
-        giveCurrencyRequest.setUuid(args[2])
+        giveCurrencyRequest.setUsername(args[2])
                 .setCurrencyCode(args[3])
                 .setAmount(args[4]);
 
@@ -49,12 +52,13 @@ public class GiveCurrencyCommand extends AbstractApiCommand {
 
         addLog(giveCurrencyResponse.getMessage());
 
-        return getLogs();
+        return returnAndClearLogs();
     }
 
     @Override
     public String helpInfo() {
-        return "This command is used to award a player with in-game virtual currency.";
+        return "This command is used to award a player with in-game virtual currency.\n" +
+                " Usage: /ds currency <player_to_give> <currency_code> <amount>";
     }
 
     @Override

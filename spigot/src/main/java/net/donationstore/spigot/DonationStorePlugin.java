@@ -1,10 +1,10 @@
 package net.donationstore.spigot;
 
 import net.donationstore.commands.CommandFactory;
-import net.donationstore.commands.CommandManager;
-import net.donationstore.models.response.PaymentsResponse;
-import net.donationstore.models.response.QueueResponse;
+import net.donationstore.logging.Logging;
 
+import net.donationstore.spigot.command.CommandHandler;
+import net.donationstore.spigot.queue.QueueTask;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,88 +13,49 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 public class DonationStorePlugin extends JavaPlugin {
 
     private Plugin plugin;
+    private QueueTask queueTask;
     private FileConfiguration config;
-    private CommandManager commandManager;
-
-    private CommandFactory commandFactory;
+    private CommandHandler commandHandler;
 
     @Override
     public void onEnable() {
 
-        commandFactory = new CommandFactory();
+        plugin = this;
 
-        Log.toConsole("Starting plugin...");
-        Log.toConsole("For Support/Help, Please Visit: https://donationstore.net/support");
+        Log.toConsole(String.format(Logging.enableLog(), "Spigot"));
+
         config = plugin.getConfig();
 
-        commandManager = new CommandManager("secretKey", "webstoreAPILocation");
+        config.options().copyDefaults();
 
-        Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-            public void run() {
-                try {
-                    ArrayList<String> executedCommands = new ArrayList<>();
-                    // Get the command queue, execute the commands that come back.
-                    // Only active commands will come back.
-                    // Keep a list of the executed commands and then POST them back using the command managers update method.
-                    QueueResponse queueResponse = commandManager.getCommands();
+        saveConfig();
 
+        queueTask = new QueueTask();
+        commandHandler = new CommandHandler();
 
-                    // Make request back with executed commands
-                    /*if (commandManager.updateCommandsToExecuted("secretKey", "webstoreAPILocation", executedCommands)) {
-                        // Do something
-                    }*/
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 1, 5000);
+        queueTask.run(config, plugin);
+
+    }
+
+    public void runCommand(String command) {
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if(command.getName().equalsIgnoreCase("ds")) {
+
             if (args.length == 0) {
-                if (sender instanceof Player) {
-                    Log.toPlayer(sender, "Webstore and Helpdesk for Game Servers");
-                    Log.toPlayer(sender, "Spigot Plugin - Version 2.1");
-                    Log.toPlayer(sender, "https://donationstore.net");
-                    Log.toPlayer(sender, "Type /ds help for command information");
-                }
+                Log.send(sender, "Webstore and Helpdesk for Game Servers");
+                Log.send(sender, "Spigot Plugin - Version 2.1");
+                Log.send(sender, "https://donationstore.net");
+                Log.send(sender, "Type /ds help for command information");
             } else {
-                // Call execute command method
-                // The actual args array will have the variables we need.
-                // BUT, we do need to put the webstoreAPILocation and secrety key as number 1 and 2
-                // The rest are whatever.
-                try {
-                    /* The following isn't possible because we need to push the secret key
-                       and webstore API location to the front of the args
-                     */
-                    // commandFactory.getCommand(args).runCommand();
-                    ArrayList<String> arrayListOfArgs = new ArrayList<>();
-
-                    String[] secretAndWebstore = {"secretKey", "webstoreAPILocation"};
-                    String[] argsForCommand = new String[secretAndWebstore.length + args.length];
-                    System.arraycopy(secretAndWebstore, 0, argsForCommand, 1, secretAndWebstore.length);
-
-
-                    commandFactory.getCommand(argsForCommand).runCommand();
-
-
-                    commandManager.executeCommand(args);
-                } catch(Exception exception) {
-                    if (sender instanceof Player) {
-                        Log.toPlayer(sender, exception.getMessage());
-                    } else {
-                        Log.toConsole(exception.getMessage());
-                    }
-                }
+                commandHandler.handleCommand(config, command, sender, plugin, args);
             }
         }
 
@@ -105,6 +66,4 @@ public class DonationStorePlugin extends JavaPlugin {
     public void onDisable() {
         Log.toConsole("Stopping plugin, bye bye!");
     }
-
-    // Override onCommand method
 }

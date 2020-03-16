@@ -15,6 +15,9 @@ public abstract class AbstractCommand implements Command {
     }
 
     @JsonIgnore
+    private String permission;
+
+    @JsonIgnore
     public abstract String getSupportedCommand();
 
     public abstract Command validate(String[] args);
@@ -37,5 +40,20 @@ public abstract class AbstractCommand implements Command {
 
     public ArrayList<String> getLogs() {
         return logs;
+    }
+
+    public ArrayList<String> returnAndClearLogs() {
+        ArrayList<String> logs = (ArrayList)getLogs().clone();
+        getLogs().clear();
+        return logs;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public AbstractCommand setPermission(String permission) {
+        this.permission = permission;
+        return this;
     }
 }
