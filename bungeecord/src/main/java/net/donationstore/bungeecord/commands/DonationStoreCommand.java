@@ -36,49 +36,50 @@ public class DonationStoreCommand extends Command {
             Log.send(commandSender, "BungeeCord Plugin - Version 2.1");
             Log.send(commandSender, "https://donationstore.net");
             Log.send(commandSender, "Type /ds help for command information");
-        }
-        if (configuration.getString("secret_key").isEmpty() || configuration.getString("webstore_api_location").isEmpty()) {
-            if (strings[0].equals("connect")) {
-                if (commandSender instanceof ProxiedPlayer) {
-                    Log.send(commandSender, "For security reasons, that command can only be executed from the console.");
-                } else {
-                    try {
-                        Log.displayLogs(commandSender, commandFactory.getCommand(strings).runCommand());
+        } else {
+            if (configuration.getString("secret_key").isEmpty() || configuration.getString("webstore_api_location").isEmpty()) {
+                if (strings[0].equals("connect")) {
+                    if (commandSender instanceof ProxiedPlayer) {
+                        Log.send(commandSender, "For security reasons, that command can only be executed from the console.");
+                    } else {
+                        try {
+                            Log.displayLogs(commandSender, commandFactory.getCommand(strings).runCommand());
 
-                        configuration.set("secret_key", strings[1]);
-                        configuration.set("webstore_api_location", strings[2]);
+                            configuration.set("secret_key", strings[1]);
+                            configuration.set("webstore_api_location", strings[2]);
 
-                        ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, new File(plugin.getDataFolder(), "config.yml"));
-                    } catch(Exception exception) {
-                        Log.send(commandSender, exception.getMessage());
+                            ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, new File(plugin.getDataFolder(), "config.yml"));
+                        } catch(Exception exception) {
+                            Log.send(commandSender, exception.getMessage());
+                        }
                     }
+                } else {
+                    Log.send(commandSender,"Cannot run commands as this plugin has not yet been setup.");
                 }
             } else {
-                Log.send(commandSender,"Cannot run commands as this plugin has not yet been setup.");
-            }
-        } else {
-            try {
-                List<String> listOfArgs = new ArrayList<>();
+                try {
+                    List<String> listOfArgs = new ArrayList<>();
 
-                listOfArgs.add(strings[0]);
-                listOfArgs.add(configuration.getString("secret_key"));
-                listOfArgs.add(configuration.getString("webstore_api_location"));
+                    listOfArgs.add(strings[0]);
+                    listOfArgs.add(configuration.getString("secret_key"));
+                    listOfArgs.add(configuration.getString("webstore_api_location"));
 
-                Collections.addAll(listOfArgs, Arrays.copyOfRange(strings, 1, strings.length));
+                    Collections.addAll(listOfArgs, Arrays.copyOfRange(strings, 1, strings.length));
 
-                if (commandSender instanceof ProxiedPlayer) {
-                    listOfArgs.add(((ProxiedPlayer) commandSender).getUniqueId().toString());
+                    if (commandSender instanceof ProxiedPlayer) {
+                        listOfArgs.add(((ProxiedPlayer) commandSender).getUniqueId().toString());
 
-                    if (commandSender.hasPermission(commandFactory.getCommand(listOfArgs.toArray(new String[0])).getPermission())) {
-                        Log.displayLogs(commandSender, commandFactory.getCommand(listOfArgs.toArray(new String[0])).runCommand());
+                        if (commandSender.hasPermission(commandFactory.getCommand(listOfArgs.toArray(new String[0])).getPermission())) {
+                            Log.displayLogs(commandSender, commandFactory.getCommand(listOfArgs.toArray(new String[0])).runCommand());
+                        } else {
+                            Log.send(commandSender, "You don't have permission to execute that command.");
+                        }
                     } else {
-                        Log.send(commandSender, "You don't have permission to execute that command.");
+                        Log.displayLogs(commandSender, commandFactory.getCommand(listOfArgs.toArray(new String[0])).runCommand());
                     }
-                } else {
-                    Log.displayLogs(commandSender, commandFactory.getCommand(listOfArgs.toArray(new String[0])).runCommand());
+                } catch(Exception exception) {
+                    Log.send(commandSender, exception.getMessage());
                 }
-            } catch(Exception exception) {
-                Log.send(commandSender, exception.getMessage());
             }
         }
     }

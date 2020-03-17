@@ -19,21 +19,19 @@ import java.util.concurrent.TimeUnit;
 public class QueueTask {
 
     private Task.Builder taskBuilder;
-    private CommandManager commandManager;
-    private SpongeExecutorService syncExecutor;
 
     public QueueTask() {
         taskBuilder = Task.builder();
     }
 
     public void run(FileConfiguration configuration, PluginContainer pluginContainer) {
-        syncExecutor = Sponge.getScheduler().createSyncExecutor(pluginContainer);
         taskBuilder.execute(() -> {
             if (configuration.getNode("secret-key").getValue() == null || configuration.getNode("webstore-api-location") == null) {
                 Log.toConsole("You must connect the plugin to your webstore before it can start executing purchased packages.");
                 Log.toConsole("Use /ds connect");
             } else {
-                commandManager = new CommandManager(configuration.getNode("secret-key").getString(), configuration.getNode("webstore-api-location").getString());
+                CommandManager commandManager = new CommandManager(configuration.getNode("secret-key").getString(), configuration.getNode("webstore-api-location").getString());
+                SpongeExecutorService syncExecutor = Sponge.getScheduler().createSyncExecutor(pluginContainer);
 
                 try {
                     UpdateCommandExecutedRequest updateCommandExecutedRequest = new UpdateCommandExecutedRequest();
@@ -46,7 +44,7 @@ public class QueueTask {
                             Optional<Player> player = Sponge.getServer().getPlayer(UUID.fromString(payment.meta.uuid));
 
                             if (player.isPresent()) {
-                                syncExecutor.submit(() -> runCommand(command.command));
+                                syncExecutor.submit(() -> Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command.command));
                                 updateCommandExecutedRequest.getCommands().add(command.id);
                             }
 
@@ -57,10 +55,6 @@ public class QueueTask {
                     Log.toConsole(e.getMessage());
                 }
             }
-        }).async().delay(10, TimeUnit.SECONDS).interval(45, TimeUnit.SECONDS).submit(pluginContainer);
-    }
-
-    public void runCommand(String command) {
-        Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
+        }).async().delay(60, TimeUnit.SECONDS).interval(10, TimeUnit.SECONDS).submit(pluginContainer);
     }
 }
