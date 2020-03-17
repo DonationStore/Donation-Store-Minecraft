@@ -1,11 +1,9 @@
 package net.donationstore.bungeecord;
 
-import com.google.common.io.ByteStreams;
 import net.donationstore.bungeecord.commands.DonationStoreCommand;
 import net.donationstore.bungeecord.config.FileConfiguration;
+import net.donationstore.bungeecord.logging.Log;
 import net.donationstore.bungeecord.queue.QueueTask;
-import net.donationstore.commands.CommandFactory;
-import net.donationstore.commands.CommandManager;
 import net.donationstore.exception.ClientException;
 import net.donationstore.logging.Logging;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -18,11 +16,8 @@ import java.io.*;
 public class DonationStorePlugin extends Plugin {
 
     private Plugin plugin;
-    private Configuration configuration;
-    private CommandManager commandManager;
-
     private QueueTask queueTask;
-    private CommandFactory commandFactory;
+    private Configuration configuration;
 
     @Override
     public void onEnable() {

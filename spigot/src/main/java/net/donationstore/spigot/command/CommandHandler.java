@@ -1,7 +1,7 @@
 package net.donationstore.spigot.command;
 
 import net.donationstore.commands.CommandFactory;
-import net.donationstore.spigot.Log;
+import net.donationstore.spigot.logging.Log;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,11 +39,7 @@ public class CommandHandler {
                     }
                 }
             } else {
-                if(sender instanceof Player) {
-                    Log.send(sender, "Cannot run commands as this plugin has not yet been setup.");
-                } else {
-                    Log.toConsole("Cannot run commands as this plugin has not yet been setup.");
-                }
+                Log.send(sender, "Cannot run commands as this plugin has not yet been setup.");
             }
         } else {
             try {
@@ -66,11 +62,7 @@ public class CommandHandler {
                     Log.displayLogs(sender, commandFactory.getCommand(listOfArgs.toArray(new String[0])).runCommand());
                 }
             } catch(Exception exception) {
-                if (sender instanceof Player) {
-                    Log.send(sender, exception.getMessage());
-                } else {
-                    Log.toConsole(exception.getMessage());
-                }
+                Log.send(sender, exception.getMessage());
             }
         }
     }

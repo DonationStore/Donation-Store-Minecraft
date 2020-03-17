@@ -1,12 +1,9 @@
 package net.donationstore.bungeecord.config;
 
-import com.google.common.io.ByteStreams;
+import net.donationstore.exception.ClientException;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class FileConfiguration {
 
@@ -19,8 +16,8 @@ public class FileConfiguration {
             if (!resourceFile.exists()) {
                 resourceFile.createNewFile();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            throw new ClientException(String.format("Exception when creating a Donation Store configuration %s", exception.getMessage()));
         }
         return resourceFile;
     }

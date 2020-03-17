@@ -1,10 +1,9 @@
-package net.donationstore.spigot;
+package net.donationstore.spigot.logging;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Log {
@@ -13,7 +12,7 @@ public class Log {
         if (sender instanceof Player) {
             sender.sendMessage(String.format("%s[Donation Store]%s: %s", ChatColor.GREEN, ChatColor.WHITE, log));
         } else {
-            System.out.println(String.format("[Donation Store]: %s", log));
+            Log.toConsole(String.format("[Donation Store]: %s", log));
         }
     }
 

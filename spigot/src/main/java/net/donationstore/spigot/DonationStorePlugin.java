@@ -1,15 +1,14 @@
 package net.donationstore.spigot;
 
-import net.donationstore.commands.CommandFactory;
 import net.donationstore.logging.Logging;
 
 import net.donationstore.spigot.command.CommandHandler;
+import net.donationstore.spigot.logging.Log;
 import net.donationstore.spigot.queue.QueueTask;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 

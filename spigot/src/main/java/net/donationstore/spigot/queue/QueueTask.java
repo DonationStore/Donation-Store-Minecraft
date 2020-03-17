@@ -4,7 +4,7 @@ import net.donationstore.commands.CommandManager;
 import net.donationstore.models.request.UpdateCommandExecutedRequest;
 import net.donationstore.models.response.PaymentsResponse;
 import net.donationstore.models.response.QueueResponse;
-import net.donationstore.spigot.Log;
+import net.donationstore.spigot.logging.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

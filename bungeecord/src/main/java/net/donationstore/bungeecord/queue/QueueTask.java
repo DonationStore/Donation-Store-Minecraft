@@ -1,6 +1,6 @@
 package net.donationstore.bungeecord.queue;
 
-import net.donationstore.bungeecord.Log;
+import net.donationstore.bungeecord.logging.Log;
 import net.donationstore.commands.CommandManager;
 import net.donationstore.models.request.UpdateCommandExecutedRequest;
 import net.donationstore.models.response.PaymentsResponse;
@@ -35,7 +35,7 @@ public class QueueTask {
                             for(net.donationstore.models.Command command: payment.commands) {
 
                                 ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(UUID.fromString(payment.meta.uuid));
-                                System.out.println(onlinePlayer.toString());
+
                                 if(onlinePlayer != null) {
                                     runCommand(plugin, command.command);
                                     updateCommandExecutedRequest.getCommands().add(command.id);

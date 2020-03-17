@@ -1,4 +1,4 @@
-package net.donationstore.bungeecord;
+package net.donationstore.bungeecord.logging;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -12,7 +12,7 @@ public class Log {
         if (sender instanceof ProxiedPlayer) {
             sender.sendMessage(String.format("%s[Donation Store]%s: %s", ChatColor.GREEN, ChatColor.WHITE, log));
         } else {
-            System.out.println(String.format("[Donation Store]: %s", log));
+            Log.toConsole(String.format("[Donation Store]: %s", log));
         }
     }
 

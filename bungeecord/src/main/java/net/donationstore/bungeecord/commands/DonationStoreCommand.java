@@ -1,6 +1,6 @@
 package net.donationstore.bungeecord.commands;
 
-import net.donationstore.bungeecord.Log;
+import net.donationstore.bungeecord.logging.Log;
 import net.donationstore.commands.CommandFactory;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
