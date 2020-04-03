@@ -1,23 +1,34 @@
 package net.donationstore.commands;
 
+import net.donationstore.enums.CommandType;
+
 import java.util.ArrayList;
 
-public class HelpCommand implements Command {
-
-    private ArrayList<String> logs;
+public class HelpCommand extends AbstractCommand {
 
     public HelpCommand() {
-        logs = new ArrayList<>();
+        setPermission("donationstore.help");
     }
 
     @Override
-    public ArrayList<String> runCommand(String[] args) {
-        logs.add("/ds currency-balances : Gets your virtual currency balances");
-        logs.add("/ds currency-code : Generates a virtual currency code");
-        logs.add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
-        logs.add("/ds help : Runs the help command");
+    public String getSupportedCommand() {
+        return "help";
+    }
 
-        return logs;
+    @Override
+    public Command validate(String[] args) {
+        return this;
+    }
+
+    @Override
+    public ArrayList<String> runCommand() {
+        getLogs().add("Help: ");
+        getLogs().add("/ds currency-balances : Gets your virtual currency balances");
+        getLogs().add("/ds currency-code : Generates a virtual currency code");
+        getLogs().add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
+        getLogs().add("/ds help : Runs the help command");
+
+        return returnAndClearLogs();
     }
 
     @Override

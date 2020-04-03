@@ -1,20 +1,37 @@
 package net.donationstore.http;
 
-import net.donationstore.commands.Command;
-import net.donationstore.dto.WebstoreAPIResponseDTO;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import net.donationstore.enums.HttpMethod;
+import net.donationstore.models.error.Error;
+import net.donationstore.models.request.GatewayRequest;
+import net.donationstore.models.response.GatewayResponse;
+import net.donationstore.exception.ClientException;
+import okhttp3.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.net.http.HttpClient;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static net.donationstore.enums.HttpMethod.POST;
 
 public class WebstoreHTTPClient {
 
+    private OkHttpClient httpClient;
     private String secretKey;
-    private HttpClient httpClient;
+    private ArrayList<String> logs;
+    public ObjectMapper objectMapper;
     private String webstoreAPILocation;
 
     public WebstoreHTTPClient() {
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .build();
+        httpClient = new OkHttpClient();
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Jdk8Module());
+        logs = new ArrayList<>();
     }
 
     public WebstoreHTTPClient setSecretKey(String secretKey) {
@@ -22,7 +39,7 @@ public class WebstoreHTTPClient {
         return this;
     }
 
-    public WebstoreHTTPClient webstoreHTTPClient(String webstoreAPILocation) {
+    public WebstoreHTTPClient setWebstoreAPILocation(String webstoreAPILocation) {
         this.webstoreAPILocation = webstoreAPILocation;
         return this;
     }
@@ -35,20 +52,64 @@ public class WebstoreHTTPClient {
         return this.webstoreAPILocation;
     }
 
-    /*
-     Command comes in as a parameter. Generic stuff that should be passed to the API are set first for all commands
-     So the secretKey and the webstoreAPILocation
+    public <T> GatewayResponse<T> sendRequest(GatewayRequest request, Class<T> responseClass) {
 
-     Then, use Jackson to map the command object (which has JSON property annotations) to a string.
+        GatewayResponse<T> gatewayResponse = new GatewayResponse<>();
 
-     Ask => Does the @JsonProperty mean that when this object is changed to JSON, they are the fields that are coming with
-     it.
-     */
-    public WebstoreAPIResponseDTO get(Command command) {
+        try {
+            String requestBody = objectMapper.writeValueAsString(request.getBody());
 
+            Request.Builder httpRequestBuilder = new Request.Builder()
+                    .url(request.getUri().toURL());
+
+            if (request.getMethod() == POST) {
+                httpRequestBuilder.post(RequestBody.create(requestBody, MediaType.get("application/json; charset=utf-8")));
+            }
+            for (Map.Entry<String, String> headerEntry : request.getHeaders().entrySet()) {
+                httpRequestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
+            }
+            Request httpRequest = httpRequestBuilder.build();
+
+            gatewayResponse.setBody(objectMapper.readValue(sendHttpRequest(httpClient, httpRequest), responseClass));
+
+        } catch (InterruptedException | IOException exception) {
+            logs.add("Exception when contacting the webstore API");
+            logs.add(ExceptionUtils.getStackTrace(exception));
+            throw new ClientException("Exception when contacting the webstore API", exception);
+        }
+
+        return gatewayResponse;
     }
 
-    public WebstoreAPIResponseDTO post(Command command) {
+    public String sendHttpRequest(OkHttpClient client, Request request) throws IOException, InterruptedException {
+        Response httpResponse = client.newCall(request).execute();
 
+        if (httpResponse.code() != 200) {
+            try {
+                System.out.println("Trying to jackson the error");
+                Error error = objectMapper.readValue(httpResponse.body().string(), Error.class);
+
+                throw new ClientException(error.getErrorMessage().getMessage());
+            } catch (JsonParseException exception) {
+                throw new ClientException(httpResponse.body().string());
+            }
+        } else {
+            return httpResponse.body().string();
+        }
+    }
+
+    public Map<String, String> getDefaultHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Secret-Key", secretKey);
+        return headers;
+    }
+
+    public GatewayRequest buildDefaultRequest(String resourceUrl, HttpMethod method, Object body) throws URISyntaxException {
+        GatewayRequest request = new GatewayRequest();
+        request.setUri(String.format("%s/%s", webstoreAPILocation, resourceUrl));
+        request.setBody(body);
+        request.setMethod(method);
+        request.setHeaders(getDefaultHeaders());
+        return request;
     }
 }

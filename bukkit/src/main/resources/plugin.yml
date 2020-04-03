@@ -1,0 +1,9 @@
+name: Donation-Store-Bukkit
+author: Donation Store
+version: 2.1
+main: net.donationstore.bukkit.DonationStorePlugin
+website: https://donationstore.net
+commands:
+  ds:
+    description: Main command for the Donation Store plugin.
+    usage: /ds
