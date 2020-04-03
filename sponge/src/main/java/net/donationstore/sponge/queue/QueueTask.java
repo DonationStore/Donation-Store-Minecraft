@@ -55,6 +55,6 @@ public class QueueTask {
                     Log.toConsole(e.getMessage());
                 }
             }
-        }).async().delay(60, TimeUnit.SECONDS).interval(10, TimeUnit.SECONDS).submit(pluginContainer);
+        }).async().delay(20, TimeUnit.SECONDS).interval(4, TimeUnit.MINUTES).submit(pluginContainer);
     }
 }

@@ -51,7 +51,8 @@ public class GiveCurrencyCommandTest {
     public void gettersSettersTest() {
         // then
         assertEquals("currency", giveCurrencyCommand.getSupportedCommand());
-        assertEquals("This command is used to award a player with in-game virtual currency.", giveCurrencyCommand.helpInfo());
+        assertEquals("This command is used to award a player with in-game virtual currency.\n" +
+                " Usage: /ds currency <player_to_give> <currency_code> <amount>", giveCurrencyCommand.helpInfo());
         assertEquals(CommandType.PLAYER, giveCurrencyCommand.commandType());
     }
 

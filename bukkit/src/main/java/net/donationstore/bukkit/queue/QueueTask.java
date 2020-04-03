@@ -1,10 +1,10 @@
-package net.donationstore.spigot.queue;
+package net.donationstore.bukkit.queue;
 
 import net.donationstore.commands.CommandManager;
 import net.donationstore.models.request.UpdateCommandExecutedRequest;
 import net.donationstore.models.response.PaymentsResponse;
 import net.donationstore.models.response.QueueResponse;
-import net.donationstore.spigot.logging.Log;
+import net.donationstore.bukkit.logging.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public class QueueTask {
                     }
                 }
             }
-        }, 1, 750);
+        }, 1, 4800);
     }
 
     public void runCommand(String command) {

@@ -1,10 +1,10 @@
-package net.donationstore.spigot;
+package net.donationstore.bukkit;
 
 import net.donationstore.logging.Logging;
 
-import net.donationstore.spigot.command.CommandHandler;
-import net.donationstore.spigot.logging.Log;
-import net.donationstore.spigot.queue.QueueTask;
+import net.donationstore.bukkit.command.CommandHandler;
+import net.donationstore.bukkit.logging.Log;
+import net.donationstore.bukkit.queue.QueueTask;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

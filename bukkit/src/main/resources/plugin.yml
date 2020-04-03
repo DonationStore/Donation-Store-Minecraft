@@ -1,7 +1,7 @@
-name: Donation-Store-Spigot
+name: Donation-Store-Bukkit
 author: Donation Store
 version: 2.1
-main: net.donationstore.spigot.DonationStorePlugin
+main: net.donationstore.bukkit.DonationStorePlugin
 website: https://donationstore.net
 commands:
   ds:

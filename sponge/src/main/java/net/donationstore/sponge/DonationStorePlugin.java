@@ -4,19 +4,19 @@ import com.google.inject.Inject;
 import net.donationstore.logging.Logging;
 import net.donationstore.sponge.commands.DonationStoreCommand;
 import net.donationstore.sponge.config.FileConfiguration;
+import net.donationstore.sponge.logging.Log;
 import net.donationstore.sponge.queue.QueueTask;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.plugin.PluginManager;
-import org.spongepowered.api.text.Text;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -55,6 +55,11 @@ public class DonationStorePlugin {
         Sponge.getCommandManager().register(pluginContainer, new DonationStoreCommand(fileConfiguration), "ds");
 
         queueTask.run(fileConfiguration, pluginContainer);
+    }
+
+    @Listener
+    public void onServerStop(GameStoppedEvent event) {
+        Log.toConsole("Stopping plugin, bye bye!");
     }
 
 }

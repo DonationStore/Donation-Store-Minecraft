@@ -37,4 +37,9 @@ public class DonationStorePlugin extends Plugin {
             throw new ClientException(String.format("Exception when starting Donation Store plugin: %s", exception.getMessage()));
         }
     }
+
+    @Override
+    public void onDisable() {
+        Log.toConsole("Stopping plugin, bye bye!");
+    }
 }

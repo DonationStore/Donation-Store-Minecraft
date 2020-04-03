@@ -1,4 +1,4 @@
-package net.donationstore.spigot.logging;
+package net.donationstore.bukkit.logging;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

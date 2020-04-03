@@ -143,16 +143,16 @@ public class WebstoreHTTPClientTest {
     @Test
     public void giveCurrencyCodeTest() throws Exception {
         // given
-        doReturn("{\"message\": \"10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd\"}").when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
+        doReturn("{\"message\": \"10 EUR given to MCxJB\"}").when(webstoreHTTPClient).sendHttpRequest(any(OkHttpClient.class), any(Request.class));
         GiveCurrencyCommand giveCurrencyCommand = new GiveCurrencyCommand();
-        giveCurrencyCommand.validate(new String[]{"secretKey", "https://example.com", "28408e37-5b7d-4c6d-b723-b7a845418dcd", "EUR", "10"});
+        giveCurrencyCommand.validate(new String[]{"secretKey", "https://example.com", "MCxJB", "EUR", "10", "28408e37-5b7d-4c6d-b723-b7a845418dcd"});
 
         // when
         GatewayResponse gatewayResponse = webstoreHTTPClient.sendRequest(buildRequest("currency/give", HttpMethod.POST), GiveCurrencyResponse.class);
         GiveCurrencyResponse giveCurrencyResponseDTO = (GiveCurrencyResponse) gatewayResponse.getBody();
 
         // then
-        assertEquals("10 EUR given to 28408e37-5b7d-4c6d-b723-b7a845418dcd", giveCurrencyResponseDTO.getMessage());
+        assertEquals("10 EUR given to MCxJB", giveCurrencyResponseDTO.getMessage());
     }
 
     @Test

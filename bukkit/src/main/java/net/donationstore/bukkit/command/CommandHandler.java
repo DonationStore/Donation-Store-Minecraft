@@ -1,7 +1,7 @@
-package net.donationstore.spigot.command;
+package net.donationstore.bukkit.command;
 
 import net.donationstore.commands.CommandFactory;
-import net.donationstore.spigot.logging.Log;
+import net.donationstore.bukkit.logging.Log;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
