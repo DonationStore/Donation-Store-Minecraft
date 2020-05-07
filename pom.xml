@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>bungeecord</module>
+        <module>velocity</module>
         <module>bukkit</module>
         <module>sponge</module>
         <module>common</module>
@@ -29,6 +30,10 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
         <repository>
+            <id>velocity-repo</id>
+            <url>https://repo.velocitypowered.com/snapshots/</url>
+        </repository>
+        <repository>
             <id>sponge-repo</id>
             <name>Sponge Maven Repository</name>
             <url>https://repo.spongepowered.org/maven</url>
@@ -37,6 +42,7 @@
 
     <properties>
         <bungeecord.version>1.14-SNAPSHOT</bungeecord.version>
+        <velocity.version>1.0.0-SNAPSHOT</velocity.version>
         <logback.version>1.2.3</logback.version>
     </properties>
 
@@ -60,6 +66,20 @@
                 <groupId>net.md-5</groupId>
                 <artifactId>bungeecord-api</artifactId>
                 <version>${bungeecord.version}</version>
+                <type>javadoc</type>
+            </dependency>
+
+            <!-- Velocity -->
+            <dependency>
+                <groupId>com.velocitypowered</groupId>
+                <artifactId>velocity-api</artifactId>
+                <version>${velocity.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>com.velocitypowered</groupId>
+                <artifactId>velocity-api</artifactId>
+                <version>${velocity.version}</version>
                 <type>javadoc</type>
             </dependency>
 
