@@ -48,7 +48,7 @@ public class QueueTask {
                     }
                 }
             }
-        }, 1, 4, TimeUnit.SECONDS);
+        }, 1, 4, TimeUnit.MINUTES);
     }
 
     public void runCommand(Plugin plugin, String command) {
