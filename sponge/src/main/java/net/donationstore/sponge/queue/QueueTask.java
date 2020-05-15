@@ -41,7 +41,7 @@ public class QueueTask {
                     for(PaymentsResponse payment: queueResponse.payments) {
                         for(net.donationstore.models.Command command: payment.commands) {
 
-                            Optional<Player> player = Sponge.getServer().getPlayer(UUID.fromString(payment.meta.uuid));
+                            Optional<Player> player = Sponge.getServer().getPlayer(UUID.fromString(command.uuid));
 
                             if (player.isPresent()) {
                                 syncExecutor.submit(() -> Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command.command));

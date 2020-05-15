@@ -76,7 +76,7 @@ public class CommandManager {
                 }
 
                 if (command.command.contains("{uuid}")) {
-                    command.command = command.command.replace(UUID_IDENTIFIER, payment.meta.uuid);
+                    command.command = command.command.replace(UUID_IDENTIFIER, command.uuid);
                 }
             }
         }

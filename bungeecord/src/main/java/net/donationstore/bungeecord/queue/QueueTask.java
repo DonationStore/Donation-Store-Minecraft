@@ -34,7 +34,7 @@ public class QueueTask {
                         for(PaymentsResponse payment: queueResponse.payments) {
                             for(net.donationstore.models.Command command: payment.commands) {
 
-                                ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(UUID.fromString(payment.meta.uuid));
+                                ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(UUID.fromString(command.uuid));
 
                                 if(onlinePlayer != null) {
                                     runCommand(plugin, command.command);
