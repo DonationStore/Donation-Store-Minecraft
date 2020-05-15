@@ -6,6 +6,7 @@ import net.donationstore.models.response.PaymentsResponse;
 import net.donationstore.models.response.QueueResponse;
 import net.donationstore.bukkit.logging.Log;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -32,7 +33,7 @@ public class QueueTask {
                         for(PaymentsResponse payment: queueResponse.payments) {
                             for(net.donationstore.models.Command command: payment.commands) {
 
-                                Player onlinePlayer = Bukkit.getPlayer(UUID.fromString(payment.meta.uuid));
+                                Player onlinePlayer = Bukkit.getPlayer(UUID.fromString(command.uuid));
                                 if(onlinePlayer != null) {
                                     Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
                                         @Override
@@ -47,10 +48,13 @@ public class QueueTask {
                         commandManager.updateCommandsToExecuted(updateCommandExecutedRequest);
                     } catch(Exception e) {
                         Log.toConsole(e.getMessage());
+                        Log.toConsole(e.getCause().toString());
+                        Log.toConsole(e.getStackTrace().toString());
                     }
                 }
             }
         }, 1, 4800);
+        // 4800
     }
 
     public void runCommand(String command) {

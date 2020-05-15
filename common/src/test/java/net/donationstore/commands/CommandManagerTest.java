@@ -49,7 +49,7 @@ public class CommandManagerTest {
         objectMapper.registerModule(new Jdk8Module());
         commandManager = new CommandManager("example", "https://example.com");
         ReflectionTestUtils.setField(commandManager, "webstoreHTTPClient", webstoreHTTPClient);
-        queueResponse = objectMapper.readValue("{\"payments\": [{\"commands\": [{\"command\": \"give {username} 1\", \"id\": 1}, {\"command\": \"give {uuid} 2\", \"id\": 2}, {\"command\": \"give {item_type} 2\", \"id\": 3}, {\"command\": \"give {transactionId} 2\", \"id\": 4}], \"meta\": {\"payment_id\": 1, \"user\": \"MCxJB\", \"transaction_id\": \"SAKDN89H3198H\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\"}, \"variables\": [{\"identifier\": \"item_type\", \"choice\": \"diamond_sword\"}]}]}", QueueResponse.class);
+        queueResponse = objectMapper.readValue("{\"payments\": [{\"commands\": [{\"command\": \"give {username} 1\", \"id\": 1, \"uuid\": \"5b05c7cc-3118-41c7-8993-ef9f3ba5fb63\" }, {\"command\": \"give {uuid} 2\", \"id\": 2, \"uuid\": \"5b05c7cc-3118-41c7-8993-ef9f3ba5fb63\" }, {\"command\": \"give {item_type} 2\", \"id\": 3, \"uuid\": \"5b05c7cc-3118-41c7-8993-ef9f3ba5fb63\" }, {\"command\": \"give {transactionId} 2\", \"id\": 4, \"uuid\": \"5b05c7cc-3118-41c7-8993-ef9f3ba5fb63\" }], \"meta\": {\"payment_id\": 1, \"user\": \"MCxJB\", \"transaction_id\": \"SAKDN89H3198H\", \"uuid\": \"28408e37-5b7d-4c6d-b723-b7a845418dcd\"}, \"variables\": [{\"identifier\": \"item_type\", \"choice\": \"diamond_sword\"}]}]}", QueueResponse.class);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class CommandManagerTest {
         assertEquals("SAKDN89H3198H", queueResponse.payments.get(0).meta.transactionId);
         assertEquals("28408e37-5b7d-4c6d-b723-b7a845418dcd", queueResponse.payments.get(0).meta.uuid);
         assertEquals("give MCxJB 1", queueResponse.payments.get(0).commands.get(0).command);
-        assertEquals("give 28408e37-5b7d-4c6d-b723-b7a845418dcd 2", queueResponse.payments.get(0).commands.get(1).command);
+        assertEquals("give 5b05c7cc-3118-41c7-8993-ef9f3ba5fb63 2", queueResponse.payments.get(0).commands.get(1).command);
         assertEquals("give diamond_sword 2", queueResponse.payments.get(0).commands.get(2).command);
         assertEquals("give SAKDN89H3198H 2", queueResponse.payments.get(0).commands.get(3).command);
         assertEquals("item_type", queueResponse.payments.get(0).variables.get(0).identifier);

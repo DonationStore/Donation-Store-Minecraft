@@ -62,6 +62,9 @@ public class CommandHandler {
                     Log.displayLogs(sender, commandFactory.getCommand(listOfArgs.toArray(new String[0])).runCommand());
                 }
             } catch(Exception exception) {
+                System.out.println("Exception as String:" + exception.toString());
+                System.out.println("Stack Trace: ");
+                exception.printStackTrace();
                 Log.send(sender, exception.getMessage());
             }
         }
