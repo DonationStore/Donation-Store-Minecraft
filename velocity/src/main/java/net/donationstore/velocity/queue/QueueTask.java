@@ -35,7 +35,7 @@ public class QueueTask {
                         for(PaymentsResponse payment: queueResponse.payments) {
                             for(net.donationstore.models.Command command: payment.commands) {
 
-                                Optional<Player> player = plugin.getServer().getPlayer(UUID.fromString(payment.meta.uuid));
+                                Optional<Player> player = plugin.getServer().getPlayer(UUID.fromString(command.uuid));
 
                                 if(player.isPresent()) {
                                     runCommand(plugin, command.command);
