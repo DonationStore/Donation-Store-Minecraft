@@ -17,7 +17,7 @@ import net.donationstore.velocity.queue.QueueTask;
 
 import java.nio.file.Path;
 
-@Plugin(id = "donationstore", name = "Donation-Store-Velocity", version = "2.1", authors = {"Donation Store"})
+@Plugin(id = "donationstore", name = "Donation-Store-Velocity", version = "2.0", authors = {"Donation Store"})
 public class DonationStorePlugin {
 
     private ProxyServer server;

@@ -27,7 +27,7 @@ public class DonationStoreCommand implements Command {
     public void execute(@NonNull CommandSource commandSender, String[] strings) {
         if(strings.length < 1) {
             Log.send(commandSender, "Webstore and Helpdesk for Game Servers");
-            Log.send(commandSender, "Velocity Plugin - Version 2.1");
+            Log.send(commandSender, "Velocity Plugin - Version 2.0");
             Log.send(commandSender, "https://donationstore.net");
             Log.send(commandSender, "Type /ds help for command information");
         } else {
