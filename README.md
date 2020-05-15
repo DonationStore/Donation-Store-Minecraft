@@ -4,6 +4,7 @@ supported:
 
 - Spigot
 - Bungeecord
+- Velocity
 - Sponge
 
 Compared to the previous version of the plugin, it has been completely rewritten and modularised, so, where possible,

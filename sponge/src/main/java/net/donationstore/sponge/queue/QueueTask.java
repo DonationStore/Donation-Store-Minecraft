@@ -26,7 +26,7 @@ public class QueueTask {
 
     public void run(FileConfiguration configuration, PluginContainer pluginContainer) {
         taskBuilder.execute(() -> {
-            if (configuration.getNode("secret-key").getValue() == null || configuration.getNode("webstore-api-location") == null) {
+            if (configuration.getNode("secret-key").getValue() == null || configuration.getNode("webstore-api-location").getValue() == null) {
                 Log.toConsole("You must connect the plugin to your webstore before it can start executing purchased packages.");
                 Log.toConsole("Use /ds connect");
             } else {
