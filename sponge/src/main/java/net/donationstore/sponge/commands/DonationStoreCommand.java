@@ -35,7 +35,7 @@ public class DonationStoreCommand implements CommandCallable {
         }
         if(args.length < 1) {
             Log.send(source, "Webstore and Helpdesk for Game Servers");
-            Log.send(source, "Sponge Plugin - Version 2.1");
+            Log.send(source, "Sponge Plugin - Version 2.2.3");
             Log.send(source, "https://donationstore.net");
             Log.send(source, "Type /ds help for command information");
         } else {

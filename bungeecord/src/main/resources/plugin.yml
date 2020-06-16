@@ -1,6 +1,6 @@
 name: Donation-Store-BungeeCord
 author: Donation Store
-version: 2.1
+version: 2.2.3
 main: net.donationstore.bungeecord.DonationStorePlugin
 website: https://donationstore.net
 commands:

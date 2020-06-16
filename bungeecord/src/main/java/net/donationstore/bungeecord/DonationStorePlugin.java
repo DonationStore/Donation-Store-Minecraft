@@ -25,10 +25,14 @@ public class DonationStorePlugin extends Plugin {
 
         queueTask = new QueueTask();
 
-        Log.toConsole(String.format(Logging.enableLog(), "BungeeCord"));
+        Log.toConsole(String.format(Logging.enableLog(), "BungeeCord", "v2.2.3"));
 
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(FileConfiguration.loadResource(plugin, "config.yml"));
+
+            if (configuration.getInt("queue_delay") == 0) {
+                configuration.set("queue_delay", 180);
+            }
 
             getProxy().getPluginManager().registerCommand(this, new DonationStoreCommand(configuration, plugin));
 

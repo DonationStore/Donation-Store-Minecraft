@@ -30,6 +30,7 @@ public class CommandFactory {
         Optional<Command> commandRunner = commandList.stream().filter(c -> c.getSupportedCommand().equals(command)).findFirst();
         return commandRunner.map(
                 c -> c.validate(Arrays.copyOfRange(args, 1, args.length))).<InvalidCommandUseException>orElseThrow(() -> {
+            logs.clear();
             logs.add("That command doesn't exist.");
             throw new InvalidCommandUseException(logs);
         });

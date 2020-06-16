@@ -1,6 +1,6 @@
 name: Donation-Store-Bukkit
 author: Donation Store
-version: 2.1
+version: 2.2.3
 main: net.donationstore.bukkit.DonationStorePlugin
 website: https://donationstore.net
 commands:

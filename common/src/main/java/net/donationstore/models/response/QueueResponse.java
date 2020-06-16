@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class QueueResponse {
 
+    public WebstoreResponse webstore;
+
     @JsonProperty("payments")
     public ArrayList<PaymentsResponse> payments;
 

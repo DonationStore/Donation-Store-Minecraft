@@ -41,7 +41,13 @@ public class QueueTask {
                     for(PaymentsResponse payment: queueResponse.payments) {
                         for(net.donationstore.models.Command command: payment.commands) {
 
-                            Optional<Player> player = Sponge.getServer().getPlayer(UUID.fromString(command.uuid));
+                            Optional<Player> player;
+
+                            if (queueResponse.webstore.webstoreType.equals("OFF")) {
+                                player = Sponge.getServer().getPlayer(command.username);
+                            } else {
+                                player = Sponge.getServer().getPlayer(UUID.fromString(command.uuid));
+                            }
 
                             if (player.isPresent()) {
                                 syncExecutor.submit(() -> Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command.command));
@@ -55,6 +61,6 @@ public class QueueTask {
                     Log.toConsole(e.getMessage());
                 }
             }
-        }).async().delay(20, TimeUnit.SECONDS).interval(4, TimeUnit.MINUTES).submit(pluginContainer);
+        }).async().delay(20, TimeUnit.SECONDS).interval(configuration.getNode("queue-delay").getInt(), TimeUnit.SECONDS).submit(pluginContainer);
     }
 }

@@ -35,7 +35,13 @@ public class QueueTask {
                         for(PaymentsResponse payment: queueResponse.payments) {
                             for(net.donationstore.models.Command command: payment.commands) {
 
-                                Optional<Player> player = plugin.getServer().getPlayer(UUID.fromString(command.uuid));
+                                Optional<Player> player;
+
+                                if (queueResponse.webstore.webstoreType.equals("OFF")) {
+                                    player = plugin.getServer().getPlayer(command.username);
+                                } else {
+                                    player = plugin.getServer().getPlayer(UUID.fromString(command.uuid));
+                                }
 
                                 if(player.isPresent()) {
                                     runCommand(plugin, command.command);
@@ -49,7 +55,7 @@ public class QueueTask {
                     }
                 }
             }
-        }).delay(20, TimeUnit.SECONDS).repeat(4, TimeUnit.MINUTES).schedule();
+        }).delay(20, TimeUnit.SECONDS).repeat(configuration.getNode("queue-delay").getInt(), TimeUnit.SECONDS).schedule();
     }
 
     public void runCommand(DonationStorePlugin plugin, String command) {

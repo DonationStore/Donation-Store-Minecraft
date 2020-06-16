@@ -7,7 +7,7 @@ public class Logging {
         builder.append("\n");
         builder.append("  _\n");
         builder.append(" | | \n");
-        builder.append("/ __)\tDonation Store - v2.2\n");
+        builder.append("/ __)\tDonation Store - v%s\n");
         builder.append("\\__ \\\t%s - https://donationstore.net/support\n");
         builder.append("(   /\tPlugin Enabled.\n");
         builder.append(" |_| \n");
