@@ -18,9 +18,9 @@ public class HelpCommandTest {
     public void setup() {
         logs = new ArrayList<>();
         logs.add("Help: ");
-        logs.add("/ds currency-balances : Gets your virtual currency balances");
-        logs.add("/ds currency-code : Generates a virtual currency code");
-        logs.add("/ds give-currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
+        logs.add("/ds balance : Gets your virtual currency balances");
+        logs.add("/ds code : Generates a virtual currency code");
+        logs.add("/ds currency <ign> <currency-code> <amount> : Gives that user, that amount of that currency");
         logs.add("/ds help : Runs the help command");
 
         helpCommand = new HelpCommand();
