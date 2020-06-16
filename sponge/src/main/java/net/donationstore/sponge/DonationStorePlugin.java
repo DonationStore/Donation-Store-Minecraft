@@ -21,7 +21,7 @@ import org.spongepowered.api.plugin.PluginManager;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-@Plugin(id = "donationstore", name = "Donation Store", version = "2.1", description = "The Sponge Plugin for Donation Store webstores")
+@Plugin(id = "donationstore", name = "Donation Store", version = "2.2.3", description = "The Sponge Plugin for Donation Store webstores")
 public class DonationStorePlugin {
 
     @Inject
@@ -45,12 +45,18 @@ public class DonationStorePlugin {
     @Listener
     public void onGamePreInitializationEvent(GamePreInitializationEvent event) {
         fileConfiguration = new FileConfiguration(configurationDir);
+
+        if (fileConfiguration.getNode("queue-delay").getInt() == 0) {
+            fileConfiguration.getNode("queue-delay").setValue(180);
+            fileConfiguration.save();
+        }
+
         queueTask = new QueueTask();
     }
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
-        logger.info(String.format(Logging.enableLog(), "Sponge"));
+        logger.info(String.format(Logging.enableLog(), "Sponge", "v2.2.3"));
 
         Sponge.getCommandManager().register(pluginContainer, new DonationStoreCommand(fileConfiguration), "ds");
 

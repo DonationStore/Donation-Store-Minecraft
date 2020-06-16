@@ -33,8 +33,15 @@ public class QueueTask {
                         for(PaymentsResponse payment: queueResponse.payments) {
                             for(net.donationstore.models.Command command: payment.commands) {
 
-                                Player onlinePlayer = Bukkit.getPlayer(UUID.fromString(command.uuid));
-                                if(onlinePlayer != null) {
+                                Player player;
+
+                                if (queueResponse.webstore.webstoreType.equals("OFF")) {
+                                    player = Bukkit.getPlayerExact(command.username);
+                                } else {
+                                    player = Bukkit.getPlayer(UUID.fromString(command.uuid));
+                                }
+
+                                if(player != null) {
                                     Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
                                         @Override
                                         public void run() {
@@ -53,7 +60,7 @@ public class QueueTask {
                     }
                 }
             }
-        }, 1, 4800);
+        }, 1, config.getInt("queue_delay") * 20);
         // 4800
     }
 

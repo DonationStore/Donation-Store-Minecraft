@@ -34,9 +34,15 @@ public class QueueTask {
                         for(PaymentsResponse payment: queueResponse.payments) {
                             for(net.donationstore.models.Command command: payment.commands) {
 
-                                ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(UUID.fromString(command.uuid));
+                                ProxiedPlayer player;
 
-                                if(onlinePlayer != null) {
+                                if (queueResponse.webstore.webstoreType.equals("OFF")) {
+                                    player = plugin.getProxy().getPlayer(command.username);
+                                } else {
+                                    player = plugin.getProxy().getPlayer(UUID.fromString(command.uuid));
+                                }
+
+                                if(player != null) {
                                     runCommand(plugin, command.command);
                                     updateCommandExecutedRequest.getCommands().add(command.id);
                                 }
@@ -48,7 +54,7 @@ public class QueueTask {
                     }
                 }
             }
-        }, 1, 4, TimeUnit.MINUTES);
+        }, 1, configuration.getInt("queue_delay"), TimeUnit.SECONDS);
     }
 
     public void runCommand(Plugin plugin, String command) {

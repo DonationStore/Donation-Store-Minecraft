@@ -68,10 +68,10 @@ public class CommandManager {
                 }
 
                 if (command.command.contains("{username}")) {
-                    command.command = command.command.replace(USERNAME_IDENTIFIER, payment.meta.user);
+                    command.command = command.command.replace(USERNAME_IDENTIFIER, command.username);
                 }
 
-                if (command.command.contains("transactionId")) {
+                if (command.command.contains("{transactionId}")) {
                     command.command = command.command.replace(TRANSACTION_ID_IDENTIFIER, payment.meta.transactionId);
                 }
 
