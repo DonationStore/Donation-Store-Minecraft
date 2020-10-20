@@ -1,6 +1,7 @@
 package net.donationstore.sponge.commands;
 
 import net.donationstore.commands.CommandFactory;
+import net.donationstore.sponge.DonationStorePlugin;
 import net.donationstore.sponge.config.FileConfiguration;
 import net.donationstore.sponge.logging.Log;
 import org.spongepowered.api.command.CommandCallable;
@@ -17,13 +18,8 @@ import java.util.*;
 
 public class DonationStoreCommand implements CommandCallable {
 
-    private CommandFactory commandFactory;
-    private FileConfiguration fileConfiguration;
-
-    public DonationStoreCommand(FileConfiguration configuration) {
-        this.fileConfiguration = configuration;
-        this.commandFactory = new CommandFactory();
-    }
+    private final CommandFactory commandFactory =  new CommandFactory();
+    private final FileConfiguration fileConfiguration = DonationStorePlugin.getInstance().getFileConfiguration();
 
     @Override
     public CommandResult process(CommandSource source, String arguments) throws CommandException {

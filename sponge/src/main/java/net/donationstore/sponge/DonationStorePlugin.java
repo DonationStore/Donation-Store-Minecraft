@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 @Plugin(id = "donationstore", name = "Donation Store", version = "2.3", description = "The Sponge Plugin for Donation Store webstores")
 public class DonationStorePlugin {
+    public static DonationStorePlugin instance;
 
     @Inject
     @ConfigDir(sharedRoot = false)
@@ -42,8 +43,17 @@ public class DonationStorePlugin {
 
     private PluginManager pluginManager = Sponge.getPluginManager();
 
+    public FileConfiguration getFileConfiguration() {
+        return fileConfiguration;
+    }
+
+    public static DonationStorePlugin getInstance() {
+        return instance;
+    }
+
     @Listener
     public void onGamePreInitializationEvent(GamePreInitializationEvent event) {
+        instance = this;
         fileConfiguration = new FileConfiguration(configurationDir);
 
         if (fileConfiguration.getNode("queue-delay").getInt() == 0) {
@@ -58,7 +68,7 @@ public class DonationStorePlugin {
     public void onServerStart(GameStartedServerEvent event) {
         logger.info(String.format(Logging.enableLog(), "Sponge", "v2.3"));
 
-        Sponge.getCommandManager().register(pluginContainer, new DonationStoreCommand(fileConfiguration), "ds");
+        Sponge.getCommandManager().register(pluginContainer, new DonationStoreCommand(), "ds");
 
         queueTask.run(fileConfiguration, pluginContainer);
     }
