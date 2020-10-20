@@ -20,6 +20,11 @@ public class CommandManager {
     private static String UUID_IDENTIFIER = "{uuid}";
     private static String USERNAME_IDENTIFIER = "{username}";
     private static String TRANSACTION_ID_IDENTIFIER = "{transactionId}";
+    private static String SERVER_IDENTIFIER = "{server}";
+    private static String AMOUNT_IDENTIFIER = "{amount}";
+    private static String PACKAGE_ID_IDENTIFIER = "{packageId}";
+    private static String PACKAGE_PRICE_IDENTIFIER = "{packagePrice}";
+    private static String PACKAGE_NAME_IDENTIFIER = "{packageName}";
 
     private ArrayList<String> logs;
     private ObjectMapper objectMapper;
@@ -67,16 +72,36 @@ public class CommandManager {
                     }
                 }
 
-                if (command.command.contains("{username}")) {
+                if (command.command.contains(USERNAME_IDENTIFIER)) {
                     command.command = command.command.replace(USERNAME_IDENTIFIER, command.username);
                 }
 
-                if (command.command.contains("{transactionId}")) {
+                if (command.command.contains(TRANSACTION_ID_IDENTIFIER)) {
                     command.command = command.command.replace(TRANSACTION_ID_IDENTIFIER, payment.meta.transactionId);
                 }
 
-                if (command.command.contains("{uuid}")) {
+                if (command.command.contains(UUID_IDENTIFIER)) {
                     command.command = command.command.replace(UUID_IDENTIFIER, command.uuid);
+                }
+
+                if (command.command.contains(SERVER_IDENTIFIER)) {
+                    command.command = command.command.replace(SERVER_IDENTIFIER, command.server);
+                }
+
+                if (command.command.contains(AMOUNT_IDENTIFIER)) {
+                    command.command = command.command.replace(AMOUNT_IDENTIFIER, command.amount);
+                }
+
+                if (command.command.contains(PACKAGE_ID_IDENTIFIER)) {
+                    command.command = command.command.replace(PACKAGE_ID_IDENTIFIER, Integer.toString(command.packageResponse.id));
+                }
+
+                if (command.command.contains(PACKAGE_PRICE_IDENTIFIER)) {
+                    command.command = command.command.replace(PACKAGE_PRICE_IDENTIFIER, command.packageResponse.price);
+                }
+
+                if (command.command.contains(PACKAGE_NAME_IDENTIFIER)) {
+                    command.command = command.command.replace(PACKAGE_NAME_IDENTIFIER, command.packageResponse.name);
                 }
             }
         }

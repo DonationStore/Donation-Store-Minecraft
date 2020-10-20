@@ -41,7 +41,17 @@ public class QueueTask {
                                     player = Bukkit.getPlayer(UUID.fromString(command.uuid));
                                 }
 
-                                if(player != null) {
+                                boolean canExecuteCommand = false;
+
+                                if (command.requireOnline) {
+                                    if (player != null) {
+                                        canExecuteCommand = true;
+                                    }
+                                } else {
+                                    canExecuteCommand = true;
+                                }
+
+                                if(canExecuteCommand) {
                                     Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
                                         @Override
                                         public void run() {

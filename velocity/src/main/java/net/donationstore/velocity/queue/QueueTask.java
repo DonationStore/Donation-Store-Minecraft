@@ -43,7 +43,17 @@ public class QueueTask {
                                     player = plugin.getServer().getPlayer(UUID.fromString(command.uuid));
                                 }
 
-                                if(player.isPresent()) {
+                                boolean canExecuteCommand = false;
+
+                                if (command.requireOnline) {
+                                    if (player.isPresent()) {
+                                        canExecuteCommand = true;
+                                    }
+                                } else {
+                                    canExecuteCommand = true;
+                                }
+
+                                if(canExecuteCommand) {
                                     runCommand(plugin, command.command);
                                     updateCommandExecutedRequest.getCommands().add(command.id);
                                 }

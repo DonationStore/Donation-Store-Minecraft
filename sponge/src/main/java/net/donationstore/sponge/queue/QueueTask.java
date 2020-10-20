@@ -49,7 +49,17 @@ public class QueueTask {
                                 player = Sponge.getServer().getPlayer(UUID.fromString(command.uuid));
                             }
 
-                            if (player.isPresent()) {
+                            boolean canExecuteCommand = false;
+
+                            if (command.requireOnline) {
+                                if (player.isPresent()) {
+                                    canExecuteCommand = true;
+                                }
+                            } else {
+                                canExecuteCommand = true;
+                            }
+
+                            if (canExecuteCommand) {
                                 syncExecutor.submit(() -> Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command.command));
                                 updateCommandExecutedRequest.getCommands().add(command.id);
                             }
