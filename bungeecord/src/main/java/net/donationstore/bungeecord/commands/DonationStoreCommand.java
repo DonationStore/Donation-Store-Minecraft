@@ -33,7 +33,7 @@ public class DonationStoreCommand extends Command {
     public void execute(CommandSender commandSender, String[] strings) {
         if(strings.length < 1) {
             Log.send(commandSender, "Webstore and Helpdesk for Game Servers");
-            Log.send(commandSender, "BungeeCord Plugin - Version 2.2.3");
+            Log.send(commandSender, "BungeeCord Plugin - Version 2.3");
             Log.send(commandSender, "https://donationstore.net");
             Log.send(commandSender, "Type /ds help for command information");
         } else {

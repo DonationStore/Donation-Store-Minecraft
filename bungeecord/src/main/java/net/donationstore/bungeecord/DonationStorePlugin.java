@@ -25,7 +25,7 @@ public class DonationStorePlugin extends Plugin {
 
         queueTask = new QueueTask();
 
-        Log.toConsole(String.format(Logging.enableLog(), "BungeeCord", "v2.2.3"));
+        Log.toConsole(String.format(Logging.enableLog(), "BungeeCord", "v2.3"));
 
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(FileConfiguration.loadResource(plugin, "config.yml"));

@@ -42,7 +42,17 @@ public class QueueTask {
                                     player = plugin.getProxy().getPlayer(UUID.fromString(command.uuid));
                                 }
 
-                                if(player != null) {
+                                boolean canExecuteCommand = false;
+
+                                if (command.requireOnline) {
+                                    if (player != null) {
+                                        canExecuteCommand = true;
+                                    }
+                                } else {
+                                    canExecuteCommand = true;
+                                }
+
+                                if(canExecuteCommand) {
                                     runCommand(plugin, command.command);
                                     updateCommandExecutedRequest.getCommands().add(command.id);
                                 }

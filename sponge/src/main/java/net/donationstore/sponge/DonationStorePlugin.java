@@ -21,7 +21,7 @@ import org.spongepowered.api.plugin.PluginManager;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-@Plugin(id = "donationstore", name = "Donation Store", version = "2.2.3", description = "The Sponge Plugin for Donation Store webstores")
+@Plugin(id = "donationstore", name = "Donation Store", version = "2.3", description = "The Sponge Plugin for Donation Store webstores")
 public class DonationStorePlugin {
     public static DonationStorePlugin instance;
 
@@ -66,7 +66,7 @@ public class DonationStorePlugin {
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
-        logger.info(String.format(Logging.enableLog(), "Sponge", "v2.2.3"));
+    	logger.info(String.format(Logging.enableLog(), "Sponge", "v2.3"));
 
         Sponge.getCommandManager().register(pluginContainer, new DonationStoreCommand(), "ds");
 

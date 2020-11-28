@@ -24,7 +24,7 @@ public class DonationStorePlugin extends JavaPlugin {
 
         plugin = this;
 
-        Log.toConsole(String.format(Logging.enableLog(), "Bukkit", "v2.2.3"));
+        Log.toConsole(String.format(Logging.enableLog(), "Bukkit", "v2.3"));
 
         config = plugin.getConfig();
 
@@ -54,7 +54,7 @@ public class DonationStorePlugin extends JavaPlugin {
 
             if (args.length == 0) {
                 Log.send(sender, "Webstore and Helpdesk for Game Servers");
-                Log.send(sender, "Bukkit Plugin - Version 2.2.3");
+                Log.send(sender, "Bukkit Plugin - Version 2.3");
                 Log.send(sender, "https://donationstore.net");
                 Log.send(sender, "Type /ds help for command information");
             } else {
