@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.4</version>
                 <configuration>
                     <relocations>
                         <relocation>
@@ -44,8 +44,12 @@
                             <shadedPattern>net.donationstore.plugin.internal.jackson</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.squareup.okhttp3</pattern>
+                            <pattern>okhttp3</pattern>
                             <shadedPattern>net.donationstore.plugin.internal.okhttp3</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>okio</pattern>
+                            <shadedPattern>net.donationstore.plugin.internal.okio</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

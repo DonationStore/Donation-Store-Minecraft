@@ -6,7 +6,7 @@
     <version>2.3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>donation-store-bukkit</artifactId>
+  <artifactId>donation-store-bungeecord</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -41,9 +41,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.14-R0.1-SNAPSHOT</version>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.14-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
